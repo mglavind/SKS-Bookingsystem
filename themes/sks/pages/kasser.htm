@@ -1,0 +1,117 @@
+title = "Kasser" 
+url = "/kasser/:kasse?" 
+layout = "kurser" 
+is_hidden = 0 
+[session] 
+security = "user" 
+redirect = "home"
+[Kasser] 
+[Materialer] 
+== 
+{% if this.param.kasse %}
+<div class="container-fluid">
+    <div class="col-xs-12">
+        <form data-request="Kasser::onUpdateKasse" id="active_form">
+            <h1>
+                Kasse
+                <div class="pull-right">
+                    <a class="btn btn-default ret">Ret</a
+                    ><button type="submit" class="btn btn-primary gem" style="display: none;">Gem</button>
+                </div>
+            </h1>
+            <input type="hidden" name="id" value="{{ this.page.kasse.id }}" />
+            <table class="table table-striped" id="active_table">
+                <tr>
+                    <th>Navn</th>
+                    <td class="editor show" style="display:none;">{{ this.page.kasse.navn }}</td>
+                    <td class="editor" style="display:none;">
+                        <input type="text" class="form-control" value="{{ this.page.kasse.navn }}" name="navn" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Plads</th>
+                    <td>{{ this.page.kasse.plads.navn }} - {{ this.page.kasse.plads.omraade.navn }}</td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="col-xs-12">
+        <h3>
+            Materialer
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#materialeAdd">+</button>
+        </h3>
+        <table class="table table-striped">
+            <tr>
+                <th>Navn</th>
+                <th>Antal</th>
+                <th>Enhed</th>
+                <th style="width:120px;"></th>
+            </tr>
+            <tbody id="tbodyMaterialer">
+                {% partial 'kasser/listMaterialer' %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %} 
+{% for kasse in this.page.kasser %}
+<div class="container-fluid">
+    <div class="col-xs-12">
+        <h3>
+            {{ kasse.plads.navn }} - {{ kasse.plads.omraade.navn }} - {{ kasse.navn }}
+        </h3>
+    </div>
+    <div class="col-xs-12">
+        <h4>
+            Materialer
+        </h4>
+        <table class="table">
+            <tr>
+                <th>Navn</th>
+                <th>Antal</th>
+            </tr>
+            <tbody id="tbodyMaterialer">
+                    {% for materiale in kasse.materialer %}
+                    <tr>
+                        <td>
+                            <a href="{{ ('materialer/' ~ materiale.id)|app }}">{{ materiale.navn }}</a>
+                        </td>
+                        <td>
+                            {{ materiale.pivot.antal }} {{ materiale.enhed }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endfor %} 
+{% endif %}
+
+<!-- Modal -->
+<form data-request="Kasser::onAddMateriale" data-request-update="'kasser/listMaterialer': '#tbodyMaterialer'">
+    <div class="modal" id="materialeAdd" tabindex="-1" role="dialog" aria-labelledby="materialeAddLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="materialeAddLabel">Tilføj materiale</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="goto" value="kasser" />
+                    <input type="hidden" name="kasse_id" value="{{ this.param.kasse }}" />
+                    <label>Materiale</label><br />
+                    {% partial 'materialer/selectMaterialer' %}<br /><br />
+                    <label>Antal</label>
+                    <input type="text" class="form-control in-focus" name="antal" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

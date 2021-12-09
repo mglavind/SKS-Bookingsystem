@@ -1,0 +1,20 @@
+==
+{% for gruppe in this.page.maaltider.grupper %}
+    <tr>
+        <td>
+            <a href="{{ ('grupper/' ~ gruppe.id)|app }}">{{ gruppe.nummer }} {{ gruppe.navn }}</a>
+        </td>
+        <td>
+            {{ gruppe.pivot.svar }}
+        </td>
+        <td>
+            <span class="vis show leave pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+            </span>
+            <span class="edit pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-danger" data-request="onDeletePlads" data-request-data="id: {{ plads.id }}"  data-request-update="'pladser/listPladser': '#tbodyPladser'">Slet</button>
+                <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+            </span>
+        </td>
+    </tr>
+{% endfor %}

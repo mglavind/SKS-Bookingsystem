@@ -1,0 +1,134 @@
+title = "Andagter"
+url = "/andagter/:andagt?"
+layout = "kurser"
+is_hidden = 0
+
+[session]
+security = "user"
+redirect = "home"
+
+[Andagter]
+==
+{% if this.param.andagt %}
+    <div class="container-fluid">
+        <div class="col-xs-12">
+            <form data-request="Andagter::onUpdateAndagtLarge" id="active_form">
+                <h1>Andagt <div class="pull-right"><a class="btn btn-default ret">Ret</a><button type="submit" class="btn btn-primary gem" style="display: none;">Gem</button></div></h1>
+                <input type="hidden" name="id" value="{{ this.page.andagt.id }}">
+                <table class="table table-striped" id="active_table">
+                    <tr>
+                        <td style="width:40%"><b>Navn</b></td>
+                        <td>{{ this.page.andagt.navn }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Sortering</b></td>
+                        <td>{{ this.page.andagt.sortering }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Tovholder</b><br>
+                            <small>* I skal vælge én tovholder i gruppen. Det er den person kursuslederne kan kontakte for at høre hvordan det går :-)<br>Bemærk at der kun kan anføres én person her.</small>
+                        </td>
+                        <td class="editor show" style="display:none;white-space: pre-line;">
+                            {{ this.page.andagt.tovholder }}
+                        </td>
+                        <td class="editor" style="display:none;">
+                            <input type="text" class="form-control" value="{{ this.page.andagt.tovholder }}" name="tovholder">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Medlemmer</b><br>
+                            <small>* Skriv navnene på dem der er med til at planlægge. Skriv gerne både for- og efternavn</small>
+                        </td>
+                        <td class="editor show" style="display:none;white-space: pre-line;">
+                            {{ this.page.andagt.medlemmer }}
+                        </td>
+                        <td class="editor" style="display:none;">
+                            <textarea class="form-control" name="medlemmer">{{ this.page.andagt.medlemmer }}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Sted</b><br>
+                            <small>* Hvor skal fællesprogrampunktet afvikles? (F.eks. "Bålhytten", "Salen" mv.)</small>
+                        </td>
+                        <td class="editor show" style="display:none;white-space: pre-line;">
+                            {{ this.page.andagt.sted }}
+                        </td>
+                        <td class="editor" style="display:none;">
+                            <textarea class="form-control" name="sted" rows="5">{{ this.page.andagt.sted }}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Musik</b><br>
+                            <small>* Hvilke sange skal der synges? Hvilke sange skal der lyttes til (live/indspilning)? Hvordan kan den musikalske oplevelse beskrives (big bang/lejrbålsguitar)? Andre ønsker til musikudvalget?</small>
+                        </td>
+                        <td class="editor show" style="display:none;white-space: pre-line;">
+                            {{ this.page.andagt.musik }}
+                        </td>
+                        <td class="editor" style="display:none;">
+                            <textarea class="form-control" name="musik" rows="5">{{ this.page.andagt.musik }}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Køkken</b><br>
+                            <small>* Har du husket at skrive en mail til Rasmus?</small>
+                        </td>
+                        <td class="editor show" style="display:none;white-space: pre-line;">
+                            {{ this.page.andagt.koekken }}
+                        </td>
+                        <td class="editor" style="display:none;">
+                            <textarea class="form-control" name="koekken" rows="5">{{ this.page.andagt.koekken }}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Teknik</b><br>
+                            <small>* Hvad skal stilles op? Strøm? Instrumenter? Mikrofoner? Projektor? Lærred? Kegler? Lys?</small>
+                        </td>
+                        <td class="editor show" style="display:none;white-space: pre-line;">
+                            {{ this.page.andagt.teknik }}
+                        </td>
+                        <td class="editor" style="display:none;">
+                            <textarea class="form-control" name="teknik" rows="5">{{ this.page.andagt.teknik }}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Medie</b><br>
+                            <small>* Hvilke sangtekster skal der vises? Skal der vises video? Skal der afspilles et stykke musik? Skal der vises billeder?</small>
+                        </td>
+                        <td class="editor show" style="display:none;white-space: pre-line;">
+                            {{ this.page.andagt.materialer }}
+                        </td>
+                        <td class="editor" style="display:none;">
+                            <textarea class="form-control" name="materialer" rows="5">{{ this.page.andagt.materialer }}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td
+                            ><b>Beskrivelse</b><br>
+                            <small>* Hvad er programmet for andagten - skrives punkt for punkt. Skriv også hvornår der synges. Hvilken stemning ønsker I at opnå i andagten? Hvad er instruktørernes opgave?</small>
+                        </td>
+                        <td class="editor show" style="display:none;white-space: pre-line;">
+                            {{ this.page.andagt.beskrivelse }}
+                        </td>
+                        <td class="editor" style="display:none;">
+                            <textarea class="form-control" name="beskrivelse" rows="15">{{ this.page.andagt.beskrivelse }}</textarea>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+{% else %}
+    <div class="container-fluid">
+        <div class="col-xs-12">
+            <h1>Fejl</h1>
+            <h4>Du har ikke valgt en andagt.</h4>
+        </div>
+    </div>
+{% endif %}

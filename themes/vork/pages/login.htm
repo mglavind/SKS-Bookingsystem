@@ -1,0 +1,35 @@
+title = "Login"
+url = "/login/:code?"
+layout = "default"
+is_hidden = 0
+
+[account]
+redirect = "min_gruppe"
+paramCode = "code"
+forceSecure = 0
+==
+{% if not user %}
+
+    <div class="row" style="margin:0px;">
+
+        <div class="col-md-6 col-md-offset-3" style="padding:30px 0px;">
+            <h3>Login</h3>
+            {% partial account ~ '::signin' %}
+            <br><br>
+            <a href="glemt-kodeord">Har du glemt dit kodeord?</a>
+        </div>
+        
+    </div>
+
+{% else %}
+
+    <div class="container-fluid">
+        <div class="col-xs-12" style="padding:40px 0px;">
+            <center>
+                <h1>Du er allerede logget ind</h1>
+                <h3><a href="{{ 'min_gruppe'|app }}">Gå til din gruppe</a></h3>
+            </center>
+        </div>
+    </div>
+
+{% endif %}

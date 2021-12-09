@@ -1,0 +1,56 @@
+title = "Søg materialer"
+url = "/soeg_materialer"
+layout = "kurser"
+is_hidden = 0
+
+[session]
+security = "user"
+redirect = "home"
+
+[Materialer]
+==
+{% put scripts %}
+    <script>
+        $("form").submit(function(e){
+            e.preventDefault();
+        });
+//        $("#soeg").click(function(e){
+//            e.preventDefault();
+//            console.log($('#materiale').val());
+//            $(this).request('onSearch', {
+//                data: {
+//                    query: $('#materiale').val()
+//                },
+//                success: function(data) {
+//                    console.log(data);
+//                }
+//            });
+//        })
+    </script>
+{% endput %}
+<div class="container-fluid" style="padding-bottom:20px;">
+    <div class="col-xs-12">
+        <h1>Søg materialer</h1>
+        <form >
+            <div class="col-xs-12 col-sm-8">
+                <input class="form-control" placeholder="Skriv navnet på materialet" id="materiale" name="materiale">
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <button type="submit" class="btn btn-primary btn-block" id="soeg" data-request="Materialer::onSearch" data-request-update="search: '#tbl_materialer'" data-request-success="console.log('yay')">Søg</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-xs-12">
+        <table class="table table-striped" id="materialer">
+            <thead>
+                <tr>
+                    <th>Materiale</th>
+                    <th>Placering</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_materialer">
+                {% partial 'search' %}
+            </tbody>
+        </table>
+    </div>
+</div>

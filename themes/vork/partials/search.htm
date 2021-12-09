@@ -1,0 +1,37 @@
+{% if this.page.soeg is null %}
+<tr>
+    <td colspan="2">
+        <h4><center>Søg efter et materiale</center></h4>
+    </td>
+</tr>
+{% elseif this.page.soeg is empty %}
+<tr>
+    <td colspan="2">
+        <h4><center>Systemet kunne ikke finde nogen materialer med det navn</center></h4>
+    </td>
+</tr>
+{% else %}
+    {% for materiale in this.page.soeg %}
+        <tr>
+            <td>
+                {% if able('editmaterialer') %}
+                <a href="{{ ('materialer/' ~ materiale.id)|app }}">{{ materiale.navn }}<small> - {{ materiale.enhed }}</small></a>
+                {% else %}
+                    {{ materiale.navn }}<small> - {{ materiale.enhed }}</small>
+                {% endif %}
+            </td>
+            <td>
+                {% for kasse in materiale.kasser %}
+                    <div>
+
+                        {% if able('editmaterialer') %}
+                            <a href="{{ ('kasser/' ~ kasse.id)|app }}">{{ kasse.navn }} - {{ kasse.plads.navn }} - {{ kasse.plads.omraade.navn }}</a>
+                        {% else %}
+                            {{ kasse.navn }} - {{ kasse.plads.navn }} - {{ kasse.plads.omraade.navn }}
+                        {% endif %}
+                        <small>({{kasse.pivot.antal}} {{materiale.enhed}})</small></div>
+                {% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+{% endif %}

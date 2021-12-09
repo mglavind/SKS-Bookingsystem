@@ -1,0 +1,15 @@
+table {
+    table-layout: fixed;
+}
+
+
+.alert {
+    margin-bottom: 0px !important;
+    border-radius: 0px !important;
+}
+
+.form-control[disabled] {
+    background-color: white;
+    color: #34495e;
+    opacity: 1;
+}

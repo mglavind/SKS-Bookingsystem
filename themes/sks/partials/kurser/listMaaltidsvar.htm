@@ -1,0 +1,9 @@
+==
+{% for key, maaltidsvar in this.page.maaltidsvar %}
+    <tr>
+        <th>{{ key }}</th>
+        {% for key, svar in maaltidsvar %}
+            <td>{{ (svar==1 ? 'Spiser inde' : (svar==2 ? 'Henter mad' : (svar==3 ? 'Laver selv' : (svar==4 ? 'Skriver mail' : svar)))) }}</td>
+        {% endfor %}
+    </tr>
+{% endfor %}

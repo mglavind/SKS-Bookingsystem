@@ -1,0 +1,17 @@
+== 
+{% for materiale in kasse.materialer %}
+<tr>
+    <td>
+        <a href="{{ ('materialer/' ~ materiale.id)|app }}">{{ materiale.navn }}</a>
+    </td>
+    <td>
+        <span class="vis show" style="display:none;">{{ materiale.pivot.antal }}</span>
+        <span class="edit" style="display:none;"
+            ><input type="text" name="antal" value="{{ materiale.pivot.antal }}" class="form-control"
+        /></span>
+    </td>
+    <td>
+        {{ materiale.enhed }}
+    </td>
+</tr>
+{% endfor %}

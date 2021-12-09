@@ -1,0 +1,33 @@
+==
+{% for gruppe in this.page.kursus.grupper %}
+<form data-request="Grupper::onUpdateGruppe">
+    <input type="hidden" name="id" value="{{ gruppe.id }}">
+    <tr>
+        <td>
+            {% if gruppe.nummer != 30 %}
+                <span class="vis show" style="display:none;"><a href="{{ ('grupper/' ~ gruppe.id)|app }}">{{ gruppe.nummer }}</a></span>
+                <span class="edit" style="display:none;"><input type="text" name="nummer" value="{{ gruppe.nummer }}" class="form-control"></span>
+            {% else %}
+                {{ gruppe.nummer }}
+            {% endif %}
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ gruppe.navn }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="navn" value="{{ gruppe.navn }}" class="form-control"></span>
+        </td>
+        {% if edit and gruppe.nummer != 30 %}
+            <td>
+                <span class="vis show leave pull-right" style="display:none;">
+                    <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+                </span>
+                <span class="edit pull-right" style="display:none;">
+                    <button type="button" class="btn btn-xs btn-danger" data-request="Grupper::onDeleteGruppe">Slet</button>
+                    <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+                </span>
+            </td>
+        {% else %}
+            <td></td>
+        {% endif %}
+    </tr>
+</form>
+{% endfor %}

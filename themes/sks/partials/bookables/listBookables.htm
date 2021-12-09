@@ -1,0 +1,48 @@
+==
+{% for bookable in this.page.kursus.bookables %}
+<form data-request="Bookables::onUpdateBookable" data-request-data="id: {{ bookable.id }}">
+    <tr>
+        <td>
+            <span class="vis show" style="display:none;"><a href="{{ ('bookables/' ~ bookable.id)|app }}">{{ bookable.navn }}</a></span>
+            <span class="edit" style="display:none;"><input type="text" name="navn" value="{{ bookable.navn }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;"><span style="width:20px;background-color:{{ bookable.color }};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ bookable.color }}</span>
+            <span class="edit" style="display:none;"><input type="color" name="color" value="{{ bookable.color }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ (bookable.faelles == 1) ? 'Ja' : 'Nej' }}</span>
+            <span class="edit" style="display:none;">
+                <input type='hidden' value='<small><i>Opdater for at se ændringen</i></small>' name='faelles'>
+                <input type='hidden' value='0' name='faelles'>
+                <div class="checkbox checkbox-slider--b-flat checkbox-slider-md">
+                    <label>
+                        <input type="checkbox" {{ (bookable.faelles == 1) ? 'checked' : '' }} value="1" name="faelles"/><span></span>
+                    </label>
+                </div>
+            </span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ (bookable.overlap == 1) ? 'Ja' : 'Nej' }}</span>
+            <span class="edit" style="display:none;">
+                <input type='hidden' value='<small><i>Opdater for at se ændringen</i></small>' name='overlap'>
+                <input type='hidden' value='0' name='overlap'>
+                <div class="checkbox checkbox-slider--b-flat checkbox-slider-md">
+                    <label>
+                        <input type="checkbox" {{ (bookable.overlap == 1) ? 'checked' : '' }} value="1" name="overlap"/><span></span>
+                    </label>
+                </div>
+            </span>
+        </td>
+        <td>
+            <span class="vis show leave pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+            </span>
+            <span class="edit pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-danger" data-request="Bookables::onDeleteBookable" data-request-data="id: {{ bookable.id }}">Slet</button>
+                <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+            </span>
+        </td>
+    </tr>
+</form>
+{% endfor %}

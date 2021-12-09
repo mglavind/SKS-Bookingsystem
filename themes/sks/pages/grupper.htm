@@ -1,0 +1,108 @@
+title = "grupper"
+url = "/grupper/:gruppe?"
+layout = "kurser"
+is_hidden = 0
+
+[session]
+security = "user"
+redirect = "home"
+
+[Grupper]
+
+[Bestillinger]
+
+[Users]
+==
+{% if this.param.gruppe %}
+<div class="container-fluid">
+    <div class="col-xs-12">
+        <form data-request="Grupper::onUpdateGruppe" id="active_form">
+            <h1>Gruppe <div class="pull-right"><a class="btn btn-default ret">Ret</a><button type="submit" class="btn btn-primary gem"
+                        style="display: none;">Gem</button></div>
+            </h1>
+            <input type="hidden" name="id" value="{{ this.page.gruppe.id }}">
+            <table class="table table-striped" id="active_table">
+                {% set felter = {
+                'navn': 'Navn',
+                'nummer': 'Nummer'
+                } %}
+                {% for navn, felt in felter %}
+                <tr>
+                    <th>{{ felt }}</th>
+                    <td class="editor show" style="display:none;">{{ this.page.gruppe[navn] }}</td>
+                    <td class="editor" style="display:none;"><input type="text" class="form-control" value="{{ this.page.gruppe[navn] }}"
+                            name="{{ navn }}"></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </div>
+    <div class="col-xs-12">
+        <h3>Deltagere <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#deltagerAdd">+</button></h3>
+        <table class="table table-striped">
+            <tr>
+                <th>Navn</th>
+                <th>Email</th>
+                <th>Type</th>
+            </tr>
+            <tbody id="tbodyGrupper">
+                {% partial 'grupper/listDeltagere' %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-xs-12">
+        <h3>Bestillinger <a href="mailto:{% for user in this.page.gruppe.users %}{{ user.email }}, {% endfor %}?subject=MSE - Materialebestillinger fra {{ this.page.gruppe['navn'] }}"
+                data-copy="{% partial 'grupper/listBestillingerWithComment' %}" class="btn btn-primary pull-right" id="send_materialebestillings_mail">Send
+                mail om bestillinger</a></h3>
+        <table class="table table-striped">
+            <tr>
+                <th>Materiale</th>
+                <th>Antal</th>
+                <th>Start</th>
+                <th>Slut</th>
+                <th>Kommentar fra useren</th>
+                <th>Medbringer selv</th>
+                <th>Bestilt af</th>
+                <th>Status</th>
+                <th>Kommentar fra smedene</th>
+                <th></th>
+            </tr>
+            <tbody id="tbodyBestillinger">
+                {% partial 'grupper/listBestillinger' %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="container-fluid">
+    <div class="col-xs-12">
+        <h1>Fejl</h1>
+        <h4>Du har ikke valgt en gruppe</h4>
+    </div>
+</div>
+{% endif %}
+
+<!-- Modal -->
+<form data-request="Grupper::onAddUser">
+    <div class="modal" id="deltagerAdd" tabindex="-1" role="dialog" aria-labelledby="kursusAddLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="kursusAddLabel">Tilføj deltager</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" value="{{ this.param.gruppe }}" name="gruppe_id">
+                    <label>User</label><br>
+                    {% partial 'users/selectUsers' %}<br><br>
+                    <label>Type</label>
+                    <input type="text" class="form-control" name="type">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

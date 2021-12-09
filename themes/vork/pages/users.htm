@@ -1,0 +1,113 @@
+title = "users"
+url = "/users/:user?"
+layout = "kurser"
+is_hidden = 0
+
+[session]
+security = "user"
+redirect = "home"
+
+[Users]
+==
+{% if this.param.user %}
+    <div class="container-fluid">
+        <div class="col-xs-12">
+            <form data-request="Users::onUpdateUser" id="active_form">
+            <h1>User <div class="pull-right"><a class="btn btn-default ret">Ret</a><button type="submit" class="btn btn-primary gem" style="display: none;">Gem</button></div></h1>
+                <input type="hidden" name="id" value="{{ user.id }}">
+                <table class="table table-striped" id="active_table">
+                    {% set felter = {
+                        'name': 'Navn',
+                        'surname': 'Efternavn',
+                        'email': 'Email',
+                        'phone': 'Telefon',
+                        'street_addr': 'Adresse',
+                        'zip': 'Postnummer',
+                        'city': 'By',
+                        'kredsnavn': 'Kreds',
+                        'medlemsnummer': 'Medlemsnummer'
+                    } %}
+                    {% for navn, felt in felter %}
+                        <tr>
+                            <th>{{ felt }}</th>
+                            <td class="editor show" style="display:none;">{{ user[navn] }}</td>
+                            <td class="editor" style="display:none;"><input type="text" class="form-control" value="{{ user[navn] }}" name="{{ navn }}"></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </form>
+        </div>
+        <div class="col-xs-12">
+            <h3>Deltagelse</h3>
+            <table class="table table-striped">
+                <tr>
+                    <th>Kursus</th>
+                    <th>Gruppe</th>
+                    <th>Type</th>
+                </tr>
+                <tbody id="tbodyGrupper">
+                    {% partial 'users/listDeltagelse' %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    <div class="container-fluid">
+        <div class="col-xs-12">
+            <h1>Users <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userAdd">+</button></h1>
+            <table class="table table-striped">
+                <tr>
+                    <th>Fornavn</th>
+                    <th>Efternavn</th>
+                    <th>Email</th>
+                    <th>Telefon</th>
+                    <th>Adresse</th>
+                    <th>Postnummer</th>
+                    <th>By</th>
+                    <th>Kredsnavn</th>
+                    <th>Medlemsnummer</th>
+                    <th style="width:120px;"></th>
+                </tr>
+                <tbody id="tbodyUsers">
+                    {% partial 'users/listUsers' %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endif %}
+
+<!-- Modal -->
+<form data-request="Users::onAddUser">
+    <div class="modal" id="userAdd" tabindex="-1" role="dialog" aria-labelledby="kursusAddLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="kursusAddLabel">Opret user</h4>
+                </div>
+                <div class="modal-body">
+                    <label>Navn</label>
+                    <input type="text" class="form-control" name="name">
+                    <label>Email</label>
+                    <input type="text" class="form-control" name="email">
+                    <label>Telefon</label>
+                    <input type="text" class="form-control" name="phone">
+                    <label>Adresse</label>
+                    <input type="text" class="form-control" name="street_addr">
+                    <label>Post nr</label>
+                    <input type="text" class="form-control" name="zip">
+                    <label>By</label>
+                    <input type="text" class="form-control" name="city">
+                    <label>Kreds</label>
+                    <input type="text" class="form-control" name="kredsnavn">
+                    <label>FDF Medlemsnummer</label>
+                    <input type="text" class="form-control" name="medlemsnummer">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

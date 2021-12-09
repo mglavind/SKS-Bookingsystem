@@ -1,0 +1,25 @@
+==
+{% for maaltid in this.page.kursus.maaltider %}
+<form data-request="Maaltider::onUpdateMaaltid">
+    <input type="hidden" name="id" value="{{ maaltid.id }}">
+    <tr>
+        <td>
+            <span class="vis show" style="display:none;">{{ maaltid.navn }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="navn" value="{{ maaltid.navn }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ maaltid.sortering }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="sortering" value="{{ maaltid.sortering }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show leave pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+            </span>
+            <span class="edit pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-danger" data-request="onDeleteMaaltid" data-request-data="id: {{ maaltid.id }}"  data-request-update="'maaltider/listMaaltider': '#tbodyMaaltider'">Slet</button>
+                <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+            </span>
+        </td>
+    </tr>
+</form>
+{% endfor %}

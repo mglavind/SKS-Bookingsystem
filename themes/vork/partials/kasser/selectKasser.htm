@@ -1,0 +1,6 @@
+==
+<select class="form-control select select-default show-select-search" data-toggle="select" name="kasse_id">
+    {% for kasse in this.page.kasser %}
+        <option value="{{ kasse.id }}">{{ kasse.navn }} - {{ kasse.plads.navn }} - {{ kasse.plads.omraade.navn }}</option>
+    {% endfor %}
+</select>

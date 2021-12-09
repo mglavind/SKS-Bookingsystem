@@ -1,0 +1,26 @@
+==
+{% for materiale in this.page.kasse.materialer %}
+<form data-request="Kasser::onUpdateMaterialeAntal" data-request-data="materiale_id: {{ materiale.id }}, kasse_id: {{ this.page.kasse.id }}">
+    <tr>
+        <td>
+            <a href="{{ ('materialer/' ~ materiale.id)|app }}">{{ materiale.navn }}</a>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ materiale.pivot.antal }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="antal" value="{{ materiale.pivot.antal }}" class="form-control"></span>
+        </td>
+        <td>
+            {{ materiale.enhed }}
+        </td>
+        <td>
+            <span class="vis show leave pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+            </span>
+            <span class="edit pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-danger" data-request="Kasser::onDeleteMateriale" data-request-data="materiale_id: {{ materiale.id }}, kasse_id: {{ this.page.kasse.id }}, goto: 'kasser'"  data-request-update="'kasser/listMaterialer': '#tbodyMaterialer'">Slet</button>
+                <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+            </span>
+        </td>
+    </tr>
+</form>
+{% endfor %}

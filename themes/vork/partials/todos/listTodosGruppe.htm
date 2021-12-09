@@ -1,0 +1,132 @@
+==
+{% for todo in this.page.gruppe.todos %}
+    {% if(todo.faelles == 0) %}
+    <form data-request="Todos::onUpdateTodo" data-request-success="location.reload();">
+        <input type="hidden" name="ids" value="{{ todo.id }}">
+        <tr>
+            <td style="width:50px;background-color:{{ todo.color }};">
+                <span class="vis show" style="display:none;"></span>
+                <span class="edit" style="display:none;"><input type="color" name="color" value="{{ todo.color }}" class="form-control"></span>
+            </td>
+            <td>
+                <div class="checkbox checkbox-slider--b-flat checkbox-slider-md">
+                    <label>
+                        <input type="checkbox" {{ (todo.done == 1) ? 'checked' : '' }} value="1" name="done-{{ todo.id }}" class="todo-checkbox" data-todo="{{ todo.id }}"/>
+                        <span>
+                            {% if(todo.done == 1) %}
+                                <a href="#" data-toggle="tooltip" data-placement="top" title="{{ todo.done_at}}">
+                                    Udført af {{ todo.user_done.name }}
+                                </a>
+                            {% endif %}
+                        </span>
+                    </label>
+                </div>
+            </td>
+            <td>
+                <span class="vis show" style="display:none;">{{ todo.tekst }}</span>
+                <span class="edit" style="display:none;"><input type="text" name="tekst" value="{{ todo.tekst }}" class="form-control"></span>
+            </td>
+            <td>
+                <span class="vis show" style="display:none;">
+                    <small class="text-muted">Deadline:</small><br>
+                    {% set difference = date(now).diff(date(todo.deadline)).days %}
+                    {% if (date(now) > date(todo.deadline)) %}
+                        <span class="text-danger" data-toggle="tooltip" data-placement="right" title="Deadlinen er overskredet">{{ todo.deadline | date("d-m-Y H:i") }}</span>
+                    {% else %}
+                        {% if difference <= 7 %}
+                            <span class="text-warning" data-toggle="tooltip" data-placement="right" title="Der er under 7 dage til deadlinen">{{ todo.deadline | date("d-m-Y H:i") }}</span>
+                        {% else %}
+                            <span class="text-success" data-toggle="tooltip" data-placement="right" title="Der er over 7 dage til deadlinen">{{ todo.deadline | date("d-m-Y H:i") }}</span>
+                        {% endif %}
+                    {% endif %}
+                </span>
+                <span class="edit" style="display:none;"><input type="text" name="deadline" value="{{ todo.deadline }}" class="form-control datetimepicker" ></span>
+            </td>
+            <td>
+                <span class="vis show" style="display:none;">{{ todo.ansvarlig }}</span>
+                <span class="edit" style="display:none;"><input type="text" name="ansvarlig" value="{{ todo.ansvarlig }}" class="form-control"></span>
+            </td>
+            <td>
+                <span class="vis show" style="display:none;">{{ todo.kommentar }}</span>
+                <span class="edit" style="display:none;"><input type="text" name="kommentar" value="{{ todo.kommentar }}" class="form-control"></span>
+            </td>
+            <td>
+                {{ todo.user_created.name }}
+            </td>
+            <td>
+                <span class="vis show leave pull-right" style="display:none;">
+                    <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+                </span>
+                <span class="edit pull-right" style="display:none;">
+                    <button type="button" class="btn btn-xs btn-danger" data-request="Todos::onDeleteTodoGruppe" data-request-data="id: {{ todo.id }}"  data-request-success="location.reload();">Slet</button>
+                    <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+                </span>
+            </td>
+        </tr>
+    </form>
+    {% else %}
+        <form data-request="Todos::onUpdateTodo" data-request-success="location.reload();">
+            <input type="hidden" name="ids" value="{{ todo.id }}">
+            <input type="hidden" name="tekst" value="{{ todo.tekst }}">
+            <input type="hidden" name="deadline" value="{{ todo.deadline }}">
+            <tr>
+                <td style="width:50px;background-color:{{ todo.color }};">
+                    <span class="vis show" style="display:none;"></span>
+                    <span class="edit" style="display:none;"><input type="color" name="color" value="{{ todo.color }}" class="form-control"></span>
+                </td>
+                <td>
+                    <div class="checkbox checkbox-slider--b-flat checkbox-slider-md">
+                        <label>
+                            <input type="checkbox" {{ (todo.done == 1) ? 'checked' : '' }} value="1" name="done-{{ todo.id }}" class="todo-checkbox" data-todo="{{ todo.id }}"/>
+                            <span>
+                                {% if(todo.done == 1) %}
+                                    <a href="#" data-toggle="tooltip" data-placement="top" title="{{ todo.done_at}}">
+                                        Udført af {{ todo.user_done.name }}
+                                    </a>
+                                {% endif %}
+                            </span>
+                        </label>
+                    </div>
+                </td>
+                <td>
+                    <small class="text-muted">Fælles:</small><br>
+                    {{ todo.tekst }}
+                </td>
+                <td>
+                    <small class="text-muted">Deadline:</small><br>
+                    <span class="vis show" style="display:none;">
+                        {% set difference = date(now).diff(date(todo.deadline)).days %}
+                        {% if (date(now) > date(todo.deadline)) %}
+                            <span class="text-danger" data-toggle="tooltip" data-placement="right" title="Deadlinen er overskredet">{{ todo.deadline | date("d-m-Y H:i") }}</span>
+                        {% else %}
+                            {% if difference <= 7 %}
+                                <span class="text-warning" data-toggle="tooltip" data-placement="right" title="Der er under 7 dage til deadlinen">{{ todo.deadline | date("d-m-Y H:i") }}</span>
+                            {% else %}
+                                <span class="text-success" data-toggle="tooltip" data-placement="right" title="Der er over 7 dage til deadlinen">{{ todo.deadline | date("d-m-Y H:i") }}</span>
+                            {% endif %}
+                        {% endif %}
+                    </span>
+                </td>
+                <td>
+                    <span class="vis show" style="display:none;">{{ todo.ansvarlig }}</span>
+                    <span class="edit" style="display:none;"><input type="text" name="ansvarlig" value="{{ todo.ansvarlig }}" class="form-control"></span>
+                </td>
+                <td>
+                    <span class="vis show" style="display:none;">{{ todo.kommentar }}</span>
+                    <span class="edit" style="display:none;"><input type="text" name="kommentar" value="{{ todo.kommentar }}" class="form-control"></span>
+                </td>
+                <td>
+                    <small class="text-muted">Fælles -</small> {{ todo.user_created.name }}
+                </td>
+                <td>
+                <span class="vis show leave pull-right" style="display:none;">
+                    <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+                </span>
+                    <span class="edit pull-right" style="display:none;">
+                    <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+                </span>
+                </td>
+            </tr>
+        </form>
+    {% endif %}
+{% endfor %}

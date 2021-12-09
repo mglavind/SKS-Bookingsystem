@@ -1,0 +1,53 @@
+==
+{% for user in this.page.users %}
+<form data-request="Users::onUpdateUser">
+    <input type="hidden" name="id" value="{{ user.id }}">
+    <tr>
+        <td>
+            <span class="vis show" style="display:none;"><a href="users/{{ user.id }}">{{ user.name }}</a></span>
+            <span class="edit" style="display:none;"><input type="text" name="name" value="{{ user.name }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ user.surname }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="surname" value="{{ user.surname }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;    overflow-wrap: anywhere;">{{ user.email }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="email" value="{{ user.email }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ user.phone }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="phone" value="{{ user.phone }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ user.street_addr }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="street_addr" value="{{ user.street_addr }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ user.zip }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="zip" value="{{ user.zip }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ user.city }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="city" value="{{ user.city }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ user.kredsnavn }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="kredsnavn" value="{{ user.kredsnavn }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ user.medlemsnummer }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="medlemsnummer" value="{{ user.medlemsnummer }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show leave pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+            </span>
+            <span class="edit pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-danger" data-request="onDeleteUser" data-request-data="id: {{ user.id }}"  data-request-update="'users/listUsers': '#tbodyUsers'">Slet</button>
+                <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+            </span>
+        </td>
+    </tr>
+</form>
+{% endfor %}

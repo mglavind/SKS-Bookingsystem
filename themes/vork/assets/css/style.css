@@ -1,0 +1,24 @@
+.slide-content > h1, .slide-content > p {
+    text-shadow: 0 0 4px black;
+}
+
+#kursus:before, #indbydelsen:before, #hvad_er_vork:before {
+    display: block;
+    content: "";
+    height: 80px;
+    margin: -80px 0 0;
+}
+
+@media screen and (min-width: 1200px) {
+    .bricklayer-column-sizer {
+        /* divide by 3. */
+        width: 33.3%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .bricklayer-column-sizer {
+        /* divide by 2. */
+        width: 50%;
+    }
+}

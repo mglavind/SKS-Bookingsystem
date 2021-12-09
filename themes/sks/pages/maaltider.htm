@@ -1,0 +1,55 @@
+title = "Måltider"
+url = "/maaltider/:maaltid?"
+layout = "kurser"
+is_hidden = 0
+
+[session]
+security = "user"
+redirect = "home"
+
+[Maaltider]
+
+[Grupper]
+==
+{% if this.param.maaltid %}
+    <div class="container-fluid">
+        <div class="col-xs-12">
+            <form data-request="Maaltider::onUpdateMaaltid" id="active_form">
+                <h1>Måltid <div class="pull-right"><a class="btn btn-default ret">Ret</a><button type="submit" class="btn btn-primary gem" style="display: none;">Gem</button></div></h1>
+                <input type="hidden" name="id" value="{{ this.page.maaltid.id }}">
+                <table class="table table-striped" id="active_table">
+                    <tr>
+                        <th>Navn</th>
+                        <td class="editor show" style="display:none;">{{ this.page.maaltid.navn }}</td>
+                        <td class="editor" style="display:none;"><input type="text" class="form-control" value="{{ this.page.maaltid.navn }}" name="navn"></td>
+                    </tr>
+                    <tr>
+                        <th>Sortering</th>
+                        <td class="editor show" style="display:none;">{{ this.page.maaltid.sortering }}</td>
+                        <td class="editor" style="display:none;"><input type="text" class="form-control" value="{{ this.page.maaltid.sortering }}" name="sortering"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="col-xs-12">
+            <h3>Grupper </h3>
+            <table class="table table-striped">
+                <tr>
+                    <th>Gruppe</th>
+                    <th>Svar</th>
+                    <th style="width:120px;"></th>
+                </tr>
+                <tbody id="tbodySvar">
+                    {% partial 'maaltider/listGrupper' %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    <div class="container-fluid">
+        <div class="col-xs-12">
+            <h1>Fejl</h1>
+            <h4>Du har ikke valgt et måltid.</h4>
+        </div>
+    </div>
+{% endif %}

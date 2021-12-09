@@ -1,0 +1,21 @@
+==
+{% for plads in this.page.omraade.pladser %}
+<form data-request="Pladser::onUpdatePlads">
+    <input type="hidden" name="id" value="{{ plads.id }}">
+    <tr>
+        <td>
+            <span class="vis show" style="display:none;"><a href="{{ ('pladser/' ~ plads.id)|app }}">{{ plads.navn }}</a></span>
+            <span class="edit" style="display:none;"><input type="text" name="navn" value="{{ plads.navn }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show leave pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+            </span>
+            <span class="edit pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-danger" data-request="onDeletePlads" data-request-data="id: {{ plads.id }}"  data-request-update="'pladser/listPladser': '#tbodyPladser'">Slet</button>
+                <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+            </span>
+        </td>
+    </tr>
+</form>
+{% endfor %}

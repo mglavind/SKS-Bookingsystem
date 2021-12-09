@@ -1,0 +1,72 @@
+title = "Pladser"
+url = "/pladser/:plads?"
+layout = "kurser"
+is_hidden = 0
+
+[session]
+security = "user"
+redirect = "home"
+
+[Pladser]
+
+[Kasser]
+==
+{% if this.param.plads %}
+    <div class="container-fluid">
+        <div class="col-xs-12">
+            <form data-request="Pladser::onUpdatePlads" id="active_form">
+                <h1>Plads <div class="pull-right"><a class="btn btn-default ret">Ret</a><button type="submit" class="btn btn-primary gem" style="display: none;">Gem</button></div></h1>
+                <input type="hidden" name="id" value="{{ this.page.plads.id }}">
+                <table class="table table-striped" id="active_table">
+                    <tr>
+                        <th>Navn</th>
+                        <td class="editor show" style="display:none;">{{ this.page.plads.navn }} - {{ this.page.plads.omraade.navn }}</td>
+                        <td class="editor" style="display:none;"><input type="text" class="form-control" value="{{ this.page.plads.navn }}" name="navn"></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="col-xs-12">
+            <h3>Kasser <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#kasseAdd">+</button></h3>
+            <table class="table table-striped">
+                <tr>
+                    <th>Navn</th>
+                    <th style="width:120px;"></th>
+                </tr>
+                <tbody id="tbodyKasser">
+                    {% partial 'kasser/listKasser' %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    <div class="container-fluid">
+        <div class="col-xs-12">
+            <h1>Fejl</h1>
+            <h4>Du har ikke valgt en plads.</h4>
+        </div>
+    </div>
+{% endif %}
+
+<!-- Modal -->
+<form data-request="Kasser::onAddKasse">
+    <div class="modal" id="kasseAdd" tabindex="-1" role="dialog" aria-labelledby="kasseAddLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="kasseAddLabel">Opret kasse</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="plads_id" value="{{ this.param.plads }}">
+                    <label>Navn</label>
+                    <input type="text" class="form-control in-focus" name="navn">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

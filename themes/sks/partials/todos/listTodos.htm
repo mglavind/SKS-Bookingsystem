@@ -1,0 +1,39 @@
+==
+{% for todo in this.page.todos %}
+<form data-request="Todos::onUpdateTodo">
+    <input type="hidden" name="ids" value="{{ todo.id }}" data-request-update="'todos/listTodos': '#tbodyTodos'">
+    <tr>
+        <td>
+            <span class="vis show" style="display:none;">{{ todo.tekst }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="tekst" value="{{ todo.tekst }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ todo.deadline }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="deadline" value="{{ todo.deadline }}" class="form-control datetimepicker" ></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;"><span style="width:20px;background-color:{{ todo.color }};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ todo.color }}</span>
+            <span class="edit" style="display:none;"><input type="color" name="color" value="{{ todo.color }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="" style="">
+                <i class="fa fa-check-square-o" aria-hidden="true"></i> {{ todo.grupper_done }}<br>
+                <i class="fa fa-square-o" aria-hidden="true"></i> {{ todo.grupper_not_done }}
+            </span>
+        </td>
+        <td>
+            <span class="vis show leave pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+            </span>
+            <span class="edit pull-right" style="display:none;">
+                {% if(todo.antal_done == 0) %}
+                    <button type="button" class="btn btn-xs btn-danger" data-request="Todos::onDeleteTodo" data-request-data="ids: [{{ todo.ids }}]"  data-request-update="'todos/listTodos': '#tbodyTodos'">Slet</button>
+                {% else %}
+                    <button type="button" class="btn btn-xs btn-danger disabled" data-toggle="tooltip" title="Det er ikke muligt at slette en todo som nogen har klaret">Slet</button>
+                {% endif %}
+                <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+            </span>
+        </td>
+    </tr>
+</form>
+{% endfor %}

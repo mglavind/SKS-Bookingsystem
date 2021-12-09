@@ -1,0 +1,137 @@
+title = "Materialer"
+url = "/materialer/:materiale?"
+layout = "kurser"
+is_hidden = 0
+
+[session]
+security = "user"
+redirect = "home"
+
+[Materialer]
+
+[Kasser]
+==
+{% if this.param.materiale %}
+    <div class="container-fluid">
+        <div class="col-xs-12">
+            <form data-request="Materialer::onUpdateMateriale" id="active_form">
+                <h1>Materiale <div class="pull-right"><a class="btn btn-default ret">Ret</a><button type="submit" class="btn btn-primary gem" style="display: none;">Gem</button></div></h1>
+                <input type="hidden" name="id" value="{{ this.page.materiale.id }}">
+                <table class="table table-striped" id="active_table">
+                    {% set felter = {
+                        'navn': 'Navn',
+                        'enhed': 'Enhed',
+                        'skaffe': 'Skaffe',
+                        'forbrug': 'Forbrug'
+                    } %}
+                    {% for navn, felt in felter %}
+                        <tr>
+                            <th>{{ felt }}</th>
+                            <td class="editor show" style="display:none;">{{ this.page.materiale[navn] }}</td>
+                            <td class="editor" style="display:none;"><input type="text" class="form-control" value="{{ this.page.materiale[navn] }}" name="{{ navn }}"></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </form>
+        </div>
+        <div class="col-xs-12">
+            <h3>Kasser <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#kasseAdd">+</button></h3>
+            <table class="table table-striped">
+                <tr>
+                    <th>Navn</th>
+                    <th>Antal</th>
+                    <th>Enhed</th>
+                    <th style="width:120px;"></th>
+                </tr>
+                <tbody id="tbodyKasser">
+                    {% partial 'materialer/listKasser' %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    <div class="container-fluid">
+        <div class="col-xs-12">
+            <h1>Materialer <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#materialeAdd">+</button></h1>
+
+            <table class="table table-striped">
+                <tr>
+                    <th>Navn</th>
+                    <th>Enhed</th>
+                    <th>Skaffe</th>
+                    <th>Forbrug</th>
+                    <th style="width:120px;"></th>
+                </tr>
+                <tbody id="tbodyMaterialer">
+                    {% partial 'materialer/listMaterialer' %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+{% endif %}
+
+<!-- Modal -->
+<form data-request="Materialer::onAddMateriale">
+    <div class="modal" id="materialeAdd" tabindex="-1" role="dialog" aria-labelledby="materialeAddLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="materialeAddLabel">Opret materiale</h4>
+                </div>
+                <div class="modal-body">
+                    <label>Navn</label>
+                    <input type="text" class="form-control in-focus" name="navn">
+                    <label>Enhed</label>
+                    <input type="text" class="form-control" name="enhed">
+                    <label>Skaffe</label>
+                    <input type='hidden' value='0' name='skaffe'>
+                    <div class="checkbox checkbox-slider--b-flat checkbox-slider-md">
+                        <label>
+                            <input type="checkbox" {{ (materiale.forbrug == 1) ? 'checked' : '' }} value="1" name="skaffe"/><span></span>
+                        </label>
+                    </div>
+                    <label>Forbrug</label>
+                    <input type='hidden' value='0' name='forbrug'>
+                    <div class="checkbox checkbox-slider--b-flat checkbox-slider-md">
+                        <label>
+                            <input type="checkbox" {{ (materiale.forbrug == 1) ? 'checked' : '' }} value="1" name="forbrug"/><span></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<!-- Modal -->
+<form data-request="Kasser::onAddMateriale" data-request-update="'materialer/listKasser': '#tbodyKasser'">
+    <div class="modal" id="kasseAdd" tabindex="-1" role="dialog" aria-labelledby="kasseAddLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="kasseAddLabel">Tilføj til kasse</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="goto" value="materialer">
+                    <input type="hidden" name="materiale_id" value="{{ this.param.materiale }}">
+                    <label>Kasse</label><br>
+                    {% partial 'kasser/selectKasser' %}<br><br>
+                    <label>Antal</label>
+                    <input type="text" class="form-control in-focus" name="antal">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

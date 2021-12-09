@@ -1,0 +1,31 @@
+==
+Kære {% for user in this.page.gruppe.users %}{{ user.name }}, {% endfor %}
+
+
+Så har vi fået gennemgået alle materialebestillinger. Vi håber at I vil svare på denne mail hurtigst muligt, så vi kan komme videre med de materialer vi har spørgsmål til. Hvis du kun kan svare på nogle af spørgsmål, så gør hellere det, så kan I nok tilsammen i jeres gruppe svare på det hele :)
+
+
+Vi har gennemgået jeres bestillinger og har spørgsmål til følgende bestillinger:
+	{% for bestilling in this.page.gruppe.bestillinger %}{% if bestilling.kommentar_smedene != "" %}• {{ bestilling.antal }} {{ bestilling.materiale.enhed }} {{ bestilling.materiale.navn }}  ({{ bestilling.start }} - {{ bestilling.slut }})
+		Smedenes kommentar:
+			{{ bestilling.kommentar_smedene }}
+		Jeres svar (Udfyld her):
+			&nbsp;
+			&nbsp;
+	{% endif %}
+{% endfor %}
+
+
+Følgende af jeres bestillinger er kommet på skaffelisten, I har som gruppe også selv et ansvar for at disse bliver skaffet. Hvis I mener at det er noget vi har ovre på Vork, så sig til, det kan jo være at noget ikke er blevet registreret i systemet:
+	{% for bestilling in this.page.gruppe.bestillinger %}{% if bestilling.kommentar_smedene == "" and bestilling.godkendt == '3' %}• {{ bestilling.antal }} {{ bestilling.materiale.enhed }} {{ bestilling.materiale.navn }}  ({{ bestilling.start }} - {{ bestilling.slut }})
+	{% endif %}
+{% endfor %}
+
+
+Og disse bestillinger er blevet tildelt:
+	{% for bestilling in this.page.gruppe.bestillinger %}{% if bestilling.kommentar_smedene == "" and bestilling.godkendt == 1 or bestilling.godkendt == 2 %}• {{ bestilling.antal }} {{ bestilling.materiale.enhed }} {{ bestilling.materiale.navn }}  ({{ bestilling.start }} - {{ bestilling.slut }})
+	{% endif %}
+{% endfor %}
+
+
+Med venlig hilsen Smedene

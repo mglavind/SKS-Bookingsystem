@@ -1,0 +1,38 @@
+==
+{% for kursus in this.page.kurser %}
+<form data-request="Kurser::onUpdateKursus">
+    <input type="hidden" name="id" value="{{ kursus.id }}">
+    <tr>
+        <td>
+            <span class="vis show" style="display:none;"><a href="kurser/{{ kursus.id }}">{{ kursus.aar }}</a></span>
+            <span class="edit" style="display:none;"><input type="text" name="aar" value="{{ kursus.aar }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ kursus.slags }}</span>
+            <span class="edit" style="display:none;">
+                <select class="form-control" id="slags" name="slags">
+                    <option value="Påske" {{ kursus.slags=='Påske' ? 'selected' : '' }}>Påske</option>
+                    <option value="Efterår" {{ kursus.slags=='Efterår' ? 'selected' : '' }}>Efterår</option>
+                </select>
+            </span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ kursus.start }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="start" value="{{ kursus.start }}" class="form-control datepicker"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ kursus.slut }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="slut" value="{{ kursus.slut }}" class="form-control datepicker"></span>
+        </td>
+        <td>
+            <span class="vis show leave pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+            </span>
+            <span class="edit pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-danger" data-request="onDeleteKursus" data-request-data="id: {{ kursus.id }}"  data-request-update="'kurser/listKurser': '#tbodyKurser'">Slet</button>
+                <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+            </span>
+        </td>
+    </tr>
+</form>
+{% endfor %}

@@ -1,0 +1,76 @@
+title = "Bookable"
+url = "/bookables/:bookable?"
+layout = "kurser"
+is_hidden = 0
+
+[session]
+security = "user"
+redirect = "home"
+
+[Bookables]
+
+[Grupper]
+==
+{% if this.param.bookable %}
+<input type="hidden" id="bookable_id" value="{{ this.page.bookable.id }}">
+<input type="hidden" id="bookable_color" value="{{ this.page.bookable.color }}">
+    <div class="container-fluid">
+        <div class="col-xs-12">
+            <form data-request="Bookables::onUpdateBookable" id="active_form">
+                <h1>Bookable <div class="pull-right"><a class="btn btn-default ret">Ret</a><button type="submit" class="btn btn-primary gem" style="display: none;">Gem</button></div></h1>
+                <input type="hidden" name="id" value="{{ this.page.bookable.id }}">
+                <table class="table table-striped" id="active_table">
+                    <tr>
+                        <th>Navn</th>
+                        <td class="editor show" style="display:none;">{{ this.page.bookable.navn }}</td>
+                        <td class="editor" style="display:none;"><input type="text" class="form-control" value="{{ this.page.bookable.navn }}" name="navn"></td>
+                    </tr>
+                    <tr>
+                        <th>Farve</th>
+                        <td class="editor show" style="display:none;"><span style="width:20px;background-color:{{ this.page.bookable.color }};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ this.page.bookable.color }}</td>
+                        <td class="editor" style="display:none;"><input type="color" class="form-control" value="{{ this.page.bookable.color }}" name="color"></td>
+                    </tr>
+                    <tr>
+                        <th>Fællesprogram</th>
+                        <td class="editor show" style="display:none;">{{ (this.page.bookable.faelles == 1 ? 'Ja' : 'Nej') }}</td>
+                        <td class="editor" style="display:none;">
+                            <input type='hidden' value='<small><i>Opdater for at se ændringen</i></small>' name='faelles'>
+                            <input type='hidden' value='0' name='faelles'>
+                            <div class="checkbox checkbox-slider--b-flat checkbox-slider-md">
+                                <label>
+                                    <input type="checkbox" {{ (this.page.bookable.faelles == 1) ? 'checked' : '' }} value="1" name="faelles"/><span></span>
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Overlap</th>
+                        <td class="editor show" style="display:none;">{{ (this.page.bookable.overlap == 1 ? 'Ja' : 'Nej') }}</td>
+                        <td class="editor" style="display:none;">
+                            <input type='hidden' value='<small><i>Opdater for at se ændringen</i></small>' name='overlap'>
+                            <input type='hidden' value='0' name='overlap'>
+                            <div class="checkbox checkbox-slider--b-flat checkbox-slider-md">
+                                <label>
+                                    <input type="checkbox" {{ (this.page.bookable.overlap == 1) ? 'checked' : '' }} value="1" name="overlap"/><span></span>
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="col-xs-12">
+            <h3>Kalender</h3>
+            <label>Gruppe</label><br>
+            {% partial 'grupper/selectGrupper' %}<br><br>
+            <div data-first-day="{{ this.page.bookable.kursus.start|date('w') }}" data-hidden-days="{{ (this.page.bookable.kursus.slags=='Påske' ? '[1, 2]' : '[]') }}" data-default-date="{{ this.page.bookable.kursus.start }}"  data-events="{{ this.page.bookinger }}" data-event-color="{{ this.page.bookable.color }}" id='calendar'></div>
+        </div>
+    </div>
+{% else %}
+    <div class="container-fluid">
+        <div class="col-xs-12">
+            <h1>Fejl</h1>
+            <h4>Du har ikke valgt en bookable.</h4>
+        </div>
+    </div>
+{% endif %}

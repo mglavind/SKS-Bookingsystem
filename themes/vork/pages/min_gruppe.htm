@@ -1,0 +1,288 @@
+title = "Min gruppe"
+url = "/min_gruppe/:gruppe?"
+layout = "kurser"
+is_hidden = 0
+
+[session]
+security = "user"
+redirect = "home"
+
+[Grupper]
+
+[Users]
+
+[Materialer]
+
+[Bestillinger]
+
+[Bookables]
+
+[Todos]
+==
+{% put scripts %}
+<script>
+    $(document).on('submit', '#gruppeBestillinger', function () {
+        $('.reset').val('');
+        $('[data-toggle="select"]').select2("val", '-- Vælg et');
+    });
+</script>
+{% endput %}
+{% if this.param.gruppe %}
+{{ able(user) }}
+<input type="hidden" id="gruppe_id" value="{{ this.param.gruppe }}">
+<div class="container-fluid" style="padding-bottom:20px;">
+    <div class="col-xs-12">
+        <h1>Gruppe
+            <small style="color:#AAAAAA;">{{ this.page.gruppe.nummer }} {{ this.page.gruppe.navn }}</small>
+            {% if this.page.gruppe.nummer != 30 and this.page.faellesprogram.id != '' %}
+            <a href="{{ this.page.faellesprogram.id }}" class="pull-right" style="font-size:24pt;">Fællesprogram -></a>
+            {% endif %}
+        </h1>
+    </div>
+    <ul class="nav nav-tabs">
+        {% if this.page.gruppe.nummer != 30 %}
+        <li class="active"><a data-toggle="tab" href="#todo">To-do</a></li>
+        <li><a data-toggle="tab" href="#andagter">Andagter&nbsp;&nbsp;<span class="label label-default">Ny!</span></a>
+        </li>
+        <li><a data-toggle="tab" href="#bestillinger">Bestillinger</a></li>
+        <li><a data-toggle="tab" href="#deltagere">Deltagere</a></li>
+        <li><a data-toggle="tab" href="#maaltider">Måltider</a></li>
+        <li><a data-toggle="tab" href="#booking">Booking</a></li>
+        {% else %}
+        <li class="active"><a data-toggle="tab" href="#bestillinger">Bestillinger</a></li>
+        {% endif %}
+    </ul>
+    <div class="tab-content">
+        <div id="todo" class="tab-pane fade {% if this.page.gruppe.nummer != 30 %} in active {% endif %}">
+            <div class="col-xs-12">
+                <h3>To-do <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#todoAdd">+
+                        Opret en todo</button></h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width:50px;"></th>
+                            <th></th>
+                            <th>Todo</th>
+                            <th>Deadline</th>
+                            <th>Ansvarlig</th>
+                            <th>Jeres kommentar</th>
+                            <th>Oprettet af</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyTodos">
+                        {% partial 'todos/listTodosGruppe' %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="andagter" class="tab-pane fade">
+            <div class="col-xs-12">
+                <h3>Andagter</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nummer</th>
+                            <th>Navn</th>
+                            <th>Tovholder</th>
+                            <th style="width:50px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyAndagter">
+                        {% partial 'andagter/listAndagterGruppe' %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="bestillinger" class="tab-pane fade {% if this.page.gruppe.nummer == 30 %} in active {% endif %}">
+            <div class="col-xs-12">
+                <h3>Bestillinger
+                    <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#bestillingAdd"
+                        aria-expanded="false" aria-controls="collapseExample">+</button>
+                </h3>
+                <div class="collapse" id="bestillingAdd">
+                    <form id="gruppeBestillinger" data-request="Bestillinger::onAddBestilling"
+                        data-request-update="'grupper/listBestillinger': '#tbodyBestillinger'"
+                        data-request-success="$('#materiale_id').val('');$('#materiale_navn').val('');">
+                        <div class="row">
+                            <input type="hidden" class="form-control in-focus" name="user_id" value="{{ user.id }}">
+                            <input type="hidden" class="form-control in-focus" name="gruppe_id"
+                                value="{{ this.param.gruppe }}">
+                            <div class="col-sm-6">
+                                <label>Materiale</label><br>
+                                {% partial 'materialer/selectMaterialer' %}
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Antal</label>
+                                <input type="text" class="form-control in-focus reset" name="antal">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Start</label>
+                                <input type="text" class="form-control datetimepicker" name="start"
+                                    value="{{ this.page.gruppe.kursus.start ~ ' 00:00' }}"
+                                    data-date-enabled-dates='[{% for x in range(this.page.gruppe.kursus.start|date("U"), this.page.gruppe.kursus.slut|date("U"), 86400 ) %}"{{ x|date("Y-m-d") }}",{% endfor %}"{{ this.page.gruppe.kursus.slut }}"]'
+                                    data-bestilling-id="new">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Slut</label>
+                                <input type="text" class="form-control datetimepicker" name="slut"
+                                    value="{{ this.page.gruppe.kursus.slut ~ ' 00:00' }}"
+                                    data-date-enabled-dates='[{% for x in range(this.page.gruppe.kursus.start|date("U"), this.page.gruppe.kursus.slut|date("U"), 86400 ) %}"{{ x|date("Y-m-d") }}",{% endfor %}"{{ this.page.gruppe.kursus.slut }}"]'
+                                    data-bestilling-id="new">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Kommentar til smedene</label>
+                                <input type="text" class="form-control in-focus reset" name="kommentar_user">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Medbringer selv</label>
+                                <input type='hidden' value='0' name='medbringer'>
+                                <div class="checkbox checkbox-slider--b-flat checkbox-slider-md">
+                                    <label>
+                                        <input type="checkbox" value="1" name="medbringer" /><span></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-xs-12" style="padding-bottom:20px;">
+                                <button class="btn btn-primary btn-block">Bestil</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <table class="table table-striped" id="dataTable2">
+                    <thead>
+                        <tr>
+                            <th>Materiale</th>
+                            <th>Antal</th>
+                            <th>Start</th>
+                            <th>Slut</th>
+                            <th>Kommentar til smedene</th>
+                            <th>Medbringer selv</th>
+                            <th>Bestilt af</th>
+                            <th>Status</th>
+                            <th>Kommentar fra smedene</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyBestillinger">
+                        {% partial 'grupper/listBestillinger' %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="deltagere" class="tab-pane fade">
+            <div class="col-xs-12">
+                <h3>Deltagere</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Navn</th>
+                            <th>Email</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyGrupper">
+                        {% partial 'grupper/listDeltagere' edit=false %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="maaltider" class="tab-pane fade">
+            <div class="col-xs-12">
+                <h3>Måltider</h3>
+                <p>Har du spørgsmål til mad, madbestillinger eller specialønsker, så skal du skrive en mail til
+                    køkkenchefen på <a href="mailto:vorkbestilling@gmail.com">vorkbestilling@gmail.com</a> </p>
+                <table class="table table-striped">
+                    <tr>
+                        <th>Navn</th>
+                        <th>Svar</th>
+                        <th></th>
+                    </tr>
+                    <tbody id="tbodyMaaltider">
+                        {% partial 'grupper/listMaaltider' %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="booking" class="tab-pane fade">
+            <div class="col-xs-12">
+                <h3>Booking</h3>
+                <div class="btn-group btn-group-lg btn_grp_booking">
+                    {% for bookable in this.page.gruppe.kursus.bookables %}
+                    {% if bookable.faelles == 0 %}
+                    <button class="btn" style="background-color:{{ bookable.color }};color:white;"
+                        data-bookable-id="{{ bookable.id }}" data-bookable-overlap="{{ bookable.overlap }}"
+                        data-bookable-color="{{ bookable.color }}">{{ bookable.navn }}</button>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div id="div_grp_booking" style="display:none;text-align:center;font-size:1.5em;">
+
+                </div>
+                <div id="divCalendarWrapper" style="display:none;">
+                    <input type="hidden" id="bookable_id" value="">
+                    <input type="hidden" id="bookable_color" value="">
+                    <input type="hidden" id="bookable_overlap" value="">
+                    <div data-first-day="{{ this.page.gruppe.kursus.start|date('w') }}"
+                        data-hidden-days="{{ (this.page.gruppe.kursus.slags=='Påske' ? '[1, 2]' : '[]') }}"
+                        data-default-date="{{ this.page.gruppe.kursus.start }}" data-events="{{ this.page.bookinger }}"
+                        id='calendar'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<form data-request="Todos::onAddTodoGruppe" data-request-update="'todos/listTodosGruppe': '#tbodyTodos'"
+    data-request-success="$('#todoAdd').modal('hide');">
+    <div class="modal" id="todoAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="todoAddLabel">Opret todo</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <input type="hidden" name="faelles" value="0">
+                    <input type="hidden" name="gruppe_id" value="{{ this.page.gruppe.id }}">
+                    <label>Tekst</label>
+                    <input type="text" class="form-control in-focus" name="tekst">
+                    <label>Deadline <a href="#" data-toggle="tooltip"
+                            title="Deadlinen er som standard kursets start tidspunkt"><i class="fa fa-info-circle"
+                                aria-hidden="true"></i></a></label>
+                    <input type="text" name="deadline" value="{{ this.page.gruppe.kursus.start }} 16:00"
+                        class="form-control datetimepicker">
+                    <label>Farve</label>
+                    <input type="color" class="form-control" name="color" value="#1abc9c">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% else %}
+<div class="container-fluid">
+    <div class="col-xs-12">
+        <h1>Hej {{ user.name }}</h1>
+        <h5>Du været med på disse grupper:</h5>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Gruppe</th>
+                    <th>Rolle</th>
+                    <th>Kursus</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyGrupperKursus">
+                {% partial 'min_gruppe/listGrupper' %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}

@@ -1,0 +1,14 @@
+==
+{% for gruppe in user.grupper %}
+    <tr>
+        <td>
+            <a href="{{ ('kurser/' ~ gruppe.kursus_id)|app }}">{{ gruppe.kursus.aar }} {{ gruppe.kursus.slags }}</a>
+        </td>
+        <td>
+            <a href="{{ ('grupper/' ~ gruppe.id)|app }}">{{ gruppe.navn }}</a>
+        </td>
+        <td>
+            {{ gruppe.pivot.type }}
+        </td>
+    </tr>
+{% endfor %}

@@ -1,0 +1,7 @@
+==
+<select class="form-control select select-default show-select-search" data-toggle="select" name="gruppe_id" id="gruppe_id">
+    <option selected disabled>-- Vælg en gruppe --</option>
+    {% for gruppe in this.page.grupper %}
+        <option value="{{ gruppe.id }}">{{ gruppe.nummer }} {{ gruppe.navn }}</option>
+    {% endfor %}
+</select>

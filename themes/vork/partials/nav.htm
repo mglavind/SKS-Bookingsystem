@@ -1,0 +1,104 @@
+==
+{# Note: Only one levels of sublinks are supported by Bootstrap 3 #}
+{% set
+    links = {
+        'Login': {
+            name: 'Login',
+            page: 'login',
+            login : false,
+            permission : '',
+        },
+        'soeg_materialer': {
+            name: 'Søg materialer',
+            page: 'soeg_materialer',
+            login : true,
+            permission : 'kursus',
+        },
+        'min_gruppe': {
+            name: 'Min gruppe',
+            page: 'min_gruppe',
+            login : true,
+            permission : 'kursus',
+        },
+        'admin': {
+            name: 'Admin',
+            login : true,
+            permission : 'editkurser',
+            sublinks: {
+                'kurser': ['kurser', 'Kurser'],
+                'users': ['users', 'Users'],
+                'omraader': ['omraader', 'Områder'],
+                'materialer': ['materialer', 'Materialer']
+            },
+        },
+    }
+%}
+
+{% macro render_menu(links, user) %}
+    {% for code, link in links %}
+        {% if (user and link.login) or (not user and not link.login) %}
+            {% if link.permission != '' %}
+                {% if able(link.permission) %}
+                    <li class="{{ code == currentPage ? 'active' }} {{ link.sublinks ? 'dropdown' }}">
+                        <a
+                            href="{{ link.sublinks ? '#' : (link.page ?: link[0])|app }}"
+                            {% if link.sublinks %}data-toggle="dropdown"{% endif %}
+                            class="{{ link.sublinks ? 'dropdown-toggle' }}"
+                        >
+
+                            {{ link.name ?: link[1] }}
+                            {% if link.sublinks %}<span class="caret"></span>{% endif %}
+                        </a>
+                        {% if link.sublinks %}
+                            <span class="dropdown-arrow"></span>
+                            <ul class="dropdown-menu">
+                                {{ _self.render_menu(link.sublinks) }}
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% endif %}
+            {% else %}
+                <li class="{{ code == currentPage ? 'active' }} {{ link.sublinks ? 'dropdown' }}">
+                    <a
+                            href="{{ link.sublinks ? '#' : (link.page ?: link[0])|app }}"
+                            {% if link.sublinks %}data-toggle="dropdown"{% endif %}
+                            class="{{ link.sublinks ? 'dropdown-toggle' }}"
+                    >
+
+                        {{ link.name ?: link[1] }}
+                        {% if link.sublinks %}<span class="caret"></span>{% endif %}
+                    </a>
+                    {% if link.sublinks %}
+                    <span class="dropdown-arrow"></span>
+                    <ul class="dropdown-menu">
+                        {{ _self.render_menu(link.sublinks) }}
+                    </ul>
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+{% import _self as nav %}
+
+<nav id="layout-nav" class="navbar navbar-inverse navbar-fixed-top navbar-lg" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="fa fa-bars"></span>
+            </button>
+            <span class="navbar-brand" style="padding-left:100px;">
+            </span>
+        </div>
+        <div class="collapse navbar-collapse navbar-main-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                {{ nav.render_menu(links, user) }}
+                {% if user %}
+                <a data-request="onLogout" data-request-data="redirect: '/'" class="btn btn-sm navbar-btn btn-primary navbar-right hidden-sm hidden-xs">Log ud</a>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

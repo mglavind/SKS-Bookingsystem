@@ -1,0 +1,50 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table vork_kurser_kurser'
+    - builder_table_create_vork_kurser_kurser.php
+1.0.3:
+    - 'Created table vork_kurser_grupper'
+    - builder_table_create_vork_kurser_grupper.php
+1.0.4:
+    - 'Created table vork_kurser_deltagelser'
+    - builder_table_create_vork_kurser_deltagelser.php
+1.0.5:
+    - 'Updated table users'
+    - user_add_fdf_fields.php
+1.0.6:
+    - 'Created table vork_kurser_omraader'
+    - builder_table_create_vork_kurser_omraader.php
+1.0.7:
+    - 'Created table vork_kurser_pladser'
+    - builder_table_create_vork_kurser_pladser.php
+1.0.8:
+    - 'Created table vork_kurser_kasser'
+    - builder_table_create_vork_kurser_kasser.php
+1.0.9:
+    - 'Created table vork_kurser_materialer'
+    - builder_table_create_vork_kurser_materialer.php
+1.0.10:
+    - 'Created table vork_kurser_forbindelser'
+    - builder_table_create_vork_kurser_forbindelser.php
+1.0.11:
+    - 'Created table vork_kurser_bestillinger'
+    - builder_table_create_vork_kurser_bestillinger.php
+1.0.11:
+    - 'Created table vork_kurser_todo'
+    - builder_table_create_vork_kurser_todo.php
+1.0.12:
+    - 'Created table vork_kurser_andagter'
+    - builder_table_create_vork_kurser_andagter.php
+1.0.13:
+    - 'Created table vork_kurser_bookable'
+    - builder_table_create_vork_kurser_bookable.php
+1.0.14:
+    - 'Created table vork_kurser_bookinger'
+    - builder_table_create_vork_kurser_bookinger.php
+1.0.15:
+    - 'Created table vork_kurser_maaltider'
+    - builder_table_create_vork_kurser_maaltider.php
+1.0.16:
+    - 'Created table vork_kurser_maaltider_svar'
+    - builder_table_create_vork_kurser_maaltider_svar.php

@@ -1,0 +1,110 @@
+title = "Det vi ikke taler om skærm"
+url = "/det-vi-ikke-taler-om-skaerm"
+layout = "kurser"
+is_hidden = 0
+role = 0
+permission = 0
+anonymous_only = 0
+==
+<style>
+    /*==========  Mobile First Method  ==========*/
+
+    /* Custom, iPhone Retina */
+    @media only screen and (min-width : 320px) {
+        .card {
+            width: calc(100% - 20px);
+        }
+    }
+
+    /* Small Devices, Tablets */
+    @media only screen and (min-width : 768px) {
+        .card {
+            width: calc(50% - 20px);
+        }
+    }
+
+    /* Large Devices, Wide Screens */
+    @media only screen and (min-width : 1200px) {
+        .card {
+            width: calc(33% - 20px);
+        }
+    }
+
+    .card {
+        color:white;
+        font-weight: 100;
+        background-color: #34495e ;
+        padding:30px;
+        padding-left:40px;
+        position: relative;
+    }
+
+    .card::before {
+        font-size: 60px;
+        position: absolute;
+        top: 0px;
+        left: 10px;
+        content: "“";
+    }
+
+
+    body {
+        background-color: #F9F7F7;
+    }
+
+    .cards {
+        width: 100%;
+        margin: 0 auto;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="cards">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modal_indsend" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="border-radius: 0px;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modal_indsendLabel">Hvad har du på hjertet?</h4>
+            </div>
+            <div class="modal-body">
+                <p>Skriv en hemmelighed du brænder inde med</p>
+                <textarea class="form-control" rows="7" id="postText"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                <button type="button" class="btn btn-primary" id="submitBtn" onClick="submitClick()">Indsend</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modal_tak" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="border-radius: 0px;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modal_takLabel">Tak for dit opslag</h4>
+            </div>
+            <div class="modal-body">
+                <p>Det vil gå lidt tid før den kommer på hjemmesiden</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% put scripts %}
+<script src="https://npmcdn.com/minigrid@3.0.1/dist/minigrid.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.9/firebase.js"></script>
+<script src="{{ [
+        'assets/javascript/pages/det-vi-ikke-snakker-om-skaerm.js',
+    ]|theme }}"></script>
+{% endput %}

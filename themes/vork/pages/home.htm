@@ -1,0 +1,23 @@
+title = "Forside"
+url = "/"
+layout = "default"
+is_hidden = 0
+role = 0
+permission = 0
+anonymous_only = 0
+logged_only = 0
+==
+<?php
+function onStart()
+{
+    $this->addCss('assets/css/style.css');
+}
+?>
+==
+<section>
+    <div class="container-fluid">
+        <div style="height: 80vh;display:flex; justify-content: center; align-items: center;">
+            <h1>SKS booking system</h1>
+        </div>
+    </div>
+</section>

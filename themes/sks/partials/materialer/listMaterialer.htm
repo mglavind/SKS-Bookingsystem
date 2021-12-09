@@ -1,0 +1,48 @@
+==
+{% for materiale in this.page.materialer %}
+<form data-request="Materialer::onUpdateMateriale" data-request-data="id: {{ materiale.id }}">
+    <tr>
+        <td>
+            <span class="vis show" style="display:none;"><a href="{{ ('materialer/' ~ materiale.id)|app }}">{{ materiale.navn }}</a></span>
+            <span class="edit" style="display:none;"><input type="text" name="navn" value="{{ materiale.navn }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ materiale.enhed }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="enhed" value="{{ materiale.enhed }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ (materiale.skaffe == 1) ? 'Ja' : 'Nej' }}</span>
+            <span class="edit" style="display:none;">
+                <input type='hidden' value='<small><i>Opdater for at se ændringen</i></small>' name='skaffe'>
+                <input type='hidden' value='0' name='skaffe'>
+                <div class="checkbox checkbox-slider--b-flat checkbox-slider-md">
+                    <label>
+                        <input type="checkbox" {{ (materiale.skaffe == 1) ? 'checked' : '' }} value="1" name="skaffe"/><span></span>
+                    </label>
+                </div>
+            </span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ (materiale.forbrug == 1) ? 'Ja' : 'Nej' }}</span>
+            <span class="edit" style="display:none;">
+                <input type='hidden' value='<small><i>Opdater for at se ændringen</i></small>' name='forbrug'>
+                <input type='hidden' value='0' name='forbrug'>
+                <div class="checkbox checkbox-slider--b-flat checkbox-slider-md">
+                    <label>
+                        <input type="checkbox" {{ (materiale.forbrug == 1) ? 'checked' : '' }} value="1" name="forbrug"/><span></span>
+                    </label>
+                </div>
+            </span>
+        </td>
+        <td>
+            <span class="vis show leave pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+            </span>
+            <span class="edit pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-danger" data-request="Materialer::onDeleteMateriale" data-request-data="id: {{ materiale.id }}"  data-request-update="'materialer/listMaterialer': '#tbodyMaterialer'">Slet</button>
+                <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+            </span>
+        </td>
+    </tr>
+</form>
+{% endfor %}

@@ -1,0 +1,3 @@
+1.0.0:
+    - "Initialize plugin. Add role_id column to users table if that field doesn't exist yet."
+    - users_add_role_id_column.php

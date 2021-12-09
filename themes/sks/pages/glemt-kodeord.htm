@@ -1,0 +1,17 @@
+title = "Glemt kodeord"
+url = "/glemt-kodeord"
+layout = "default"
+is_hidden = 0
+
+[resetPassword]
+paramCode = "code"
+==
+<div class="container" style="padding:40px 0px;">
+    <div id="partialUserResetForm">
+        {% if resetPassword.code == null %}
+            {% partial resetPassword ~ '::restore' %}
+        {% else %}
+            {% partial resetPassword ~ '::reset' %}
+        {% endif %}
+    </div>
+</div>

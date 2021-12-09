@@ -1,0 +1,110 @@
+title = "Områder"
+url = "/omraader/:omraade?"
+layout = "kurser"
+is_hidden = 0
+
+[session]
+security = "user"
+redirect = "home"
+
+[Omraader]
+
+[Pladser]
+==
+{% if this.param.omraade %}
+    <div class="container-fluid">
+        <div class="col-xs-12">
+            <form data-request="Omraader::onUpdateOmraade" id="active_form">
+                <h1>Område <div class="pull-right"><a class="btn btn-default ret">Ret</a><button type="submit" class="btn btn-primary gem" style="display: none;">Gem</button></div></h1>
+                <input type="hidden" name="id" value="{{ this.page.omraade.id }}">
+                <table class="table table-striped" id="active_table">
+                    {% set felter = {
+                    'navn': 'Navn'
+                    } %}
+                    {% for navn, felt in felter %}
+                        <tr>
+                            <th>{{ felt }}</th>
+                            <td class="editor show" style="display:none;">{{ this.page.omraade[navn] }}</td>
+                            <td class="editor" style="display:none;"><input type="text" class="form-control" value="{{ this.page.omraade[navn] }}" name="{{ navn }}"></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </form>
+        </div>
+        <div class="col-xs-12">
+            <h3>Pladser <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pladsAdd">+</button></h3>
+            <table class="table table-striped">
+                <tr>
+                    <th>Navn</th>
+                    <th style="width:120px;"></th>
+                </tr>
+                <tbody id="tbodyPladser">
+                    {% partial 'pladser/listPladser' %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    <div class="container-fluid">
+        <div class="col-xs-12">
+            <h1>Områder <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#omraadeAdd">+</button></h1>
+
+            <table class="table table-striped">
+                <tr>
+                    <th>Navn</th>
+                    <th style="width:120px;"></th>
+                </tr>
+                <tbody id="tbodyOmraade">
+                    {% partial 'omraader/listOmraader' %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+{% endif %}
+
+<!-- Modal -->
+<form data-request="Omraader::onAddOmraade">
+    <div class="modal" id="omraadeAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="omraaderAddLabel">Opret område</h4>
+                </div>
+                <div class="modal-body">
+                    <label>Navn</label>
+                    <input type="text" class="form-control in-focus" name="navn">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<!-- Modal -->
+<form data-request="Pladser::onAddPlads">
+    <div class="modal" id="pladsAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="pladsAddLabel">Opret plads</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="omraade_id" value="{{ this.param.omraade }}">
+                    <label>Navn</label>
+                    <input type="text" class="form-control in-focus" name="navn">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

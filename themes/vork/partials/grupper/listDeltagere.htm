@@ -1,0 +1,22 @@
+==
+{% set useren = user %}
+{% for user in this.page.gruppe.users %}
+    <tr>
+        <td>
+            {% if (useren.id == user.id) or able('editusers') %}
+                <a href="{{ ('users/' ~ user.id)|app }}">{{ user.name }} {{ user.surname }}</a>
+            {% else %}
+                {{ user.name }} {{ user.surname }}
+            {% endif %}
+        </td>
+        <td>
+            {{ user.email }}
+        </td>
+        <td>
+            {{ user.pivot.type }}
+            {% if able('editusers') %}
+                <button type="button" class="btn btn-xs btn-danger pull-right" data-request="Grupper::onDeleteUser" data-request-data="gruppe_id: {{ this.page.gruppe.id }}, user_id: {{ user.id }}">Slet</button>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}

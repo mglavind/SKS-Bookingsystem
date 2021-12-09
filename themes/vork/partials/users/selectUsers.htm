@@ -1,0 +1,6 @@
+==
+<select class="form-control select select-default show-select-search" data-toggle="select" name="user_id">
+    {% for user in this.page.users %}
+        <option value="{{ user.id }}">{{ user.name }} {{ user.surname }} - {{ user.email }}</option>
+    {% endfor %}
+</select>

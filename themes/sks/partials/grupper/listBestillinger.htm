@@ -1,0 +1,81 @@
+==
+{% for bestilling in this.page.gruppe.bestillinger %}
+<form data-request="Bestillinger::onUpdateBestilling">
+    <input type="hidden" name="id" value="{{ bestilling.id }}">
+    <tr class="{{ (bestilling.medbringer == 1 ? 'success' : (bestilling.godkendt == 1 ? 'success' : (bestilling.godkendt == 2 ? 'success' : (bestilling.kommentar_smedene != '' ? 'warning' : (bestilling.godkendt == '3' ? 'danger' : ''))))) }}">
+        <td>
+            <span>
+                {% if able('editmaterialer') %}
+                <a href="{{ ('materialer/' ~ bestilling.materiale.id)|app }}">{{ bestilling.materiale.navn }}<small> -
+                        {{ bestilling.materiale.enhed }}</small></a>
+                {% else %}
+                {{ bestilling.materiale.navn }}<small> - {{ bestilling.materiale.enhed }}</small>
+                {% endif %}
+            </span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ bestilling.antal }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="antal" value="{{ bestilling.antal }}"
+                    class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ bestilling.start }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="start" value="{{ bestilling.start }}"
+                    class="form-control datetimepicker" data-date-enabled-dates='[{% for x in range(this.page.gruppe.kursus.start|date("U"), this.page.gruppe.kursus.slut|date("U"), 86400 ) %}"{{ x|date("Y-m-d") }}",{% endfor %}"{{ this.page.gruppe.kursus.slut }}"]'
+                    data-bestilling-id="{{ bestilling.id }}"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ bestilling.slut }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="slut" value="{{ bestilling.slut }}" class="form-control datetimepicker"
+                    data-date-enabled-dates='[{% for x in range(this.page.gruppe.kursus.start|date("U"), this.page.gruppe.kursus.slut|date("U"), 86400 ) %}"{{ x|date("Y-m-d") }}",{% endfor %}"{{ this.page.gruppe.kursus.slut }}"]'
+                    data-bestilling-id="{{ bestilling.id }}"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ bestilling.kommentar_user }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="kommentar_user" value="{{ bestilling.kommentar_user }}"
+                    class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ (bestilling.medbringer == 1) ? 'Ja' : 'Nej' }}</span>
+            <span class="edit" style="display:none;">
+                <input type='hidden' value='<small><i>Opdater for at se ændringen</i></small>' name='skaffe'>
+                <input type='hidden' value='0' name='medbringer'>
+                <div class="checkbox checkbox-slider--b-flat checkbox-slider-md">
+                    <label>
+                        <input type="checkbox" {{ (bestilling.medbringer == 1) ? 'checked' : '' }} value="1" name="medbringer" /><span></span>
+                    </label>
+                </div>
+            </span>
+        </td>
+        <td>
+            {{ bestilling.user.name }} {{ bestilling.user.surname }}
+        </td>
+        <td>
+            {{ (bestilling.medbringer == 1 ? '<i class="fa fa-check" aria-hidden="true"></i> <small>Medbringer selv</small>'
+            : (bestilling.godkendt == 1 ? '<i class="fa fa-check" aria-hidden="true"></i> <small>Tildelt</small>' :
+            (bestilling.godkendt == 2 ? '<i class="fa fa-check" aria-hidden="true"></i> <small>Tildelt</small>' :
+            (bestilling.kommentar_smedene != '' ? '<i class="fa fa-envelope" aria-hidden="true"></i> <small>Læs
+                kommentar</small>' : (bestilling.godkendt == '3' ? '<i class="fa fa-ban" aria-hidden="true"></i> <small>Ikke
+                tildelt - Kommer på skaffelisten</small>' : ''))))) }}
+        </td>
+        <td>
+            {{ bestilling.kommentar_smedene }}
+        </td>
+        {% if able('editmaterialer') or this.page.gruppe.nummer != 30 or (this.page.gruppe.nummer == 30 and
+        bestilling.user.id == user.id) %}
+        <td>
+            <span class="vis show leave pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+            </span>
+            <span class="edit pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-danger" data-request="onDeleteBestilling" data-request-data="id: {{ bestilling.id }}"
+                    data-request-update="'grupper/listBestillinger': '#tbodyBestillinger'">Slet</button>
+                <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+            </span>
+        </td>
+        {% else %}
+        <td></td>
+        {% endif %}
+    </tr>
+</form>
+{% endfor %}

@@ -1,0 +1,21 @@
+==
+{% for omraade in this.page.omraader %}
+<form data-request="Omraader::onUpdateOmraade">
+    <input type="hidden" name="id" value="{{ omraade.id }}">
+    <tr>
+        <td>
+            <span class="vis show" style="display:none;"><a href="{{ ('omraader/' ~ omraade.id)|app }}">{{ omraade.navn }}</a></span>
+            <span class="edit" style="display:none;"><input type="text" name="navn" value="{{ omraade.navn }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show leave pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+            </span>
+            <span class="edit pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-danger" data-request="onDeleteKursus" data-request-data="id: {{ kursus.id }}"  data-request-update="'kurser/listKurser': '#tbodyKurser'">Slet</button>
+                <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+            </span>
+        </td>
+    </tr>
+</form>
+{% endfor %}

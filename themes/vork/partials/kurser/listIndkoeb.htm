@@ -1,0 +1,9 @@
+==
+{% for indkoeb in this.page.indkoeb %}
+    <tr>
+        <td><a href="{{ ('materialer/' ~ indkoeb.id)|app }}">{{ indkoeb.navn }}<small> - {{ indkoeb.enhed }}</small></a></td>
+        <td>{{ (indkoeb.lager == "" ? 0 : indkoeb.lager ) }}</td>
+        <td>{{ (indkoeb.bestilt == "" ? 0 : indkoeb.bestilt ) }}</td>
+        <td><b>{{ (indkoeb.bestilt-indkoeb.lager) }}</b></td>
+    </tr>
+{% endfor %}

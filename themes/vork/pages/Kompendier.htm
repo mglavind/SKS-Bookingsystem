@@ -1,0 +1,57 @@
+title = "Kompendier"
+url = "/kompendier"
+layout = "kurser"
+is_hidden = 0
+role = 0
+permission = 0
+anonymous_only = 0
+
+[Kompendier]
+==
+{% put scripts %}
+    <script>
+        $(document).ready(function() {
+            $(".folder").click(function(){
+                $(this).toggleClass("folder-closed");
+                $(this).toggleClass("folder-open");
+            });
+        })
+    </script>
+{% endput %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12" style="padding-bottom:30px;">
+            <h2>Kompendier</h2>
+            {% for root in this.page.root %}
+                {% for key1, dummy1 in root %}
+                    {% for key2, folders in dummy1 %}
+                        <div class="folder folder-closed">
+                            <img class="closed" src="{{('filetypes/folder.svg')|media}}" style="height:30px;margin-right:10px;">
+                            <img class="open" src="{{('filetypes/folder-open.svg')|media}}" style="height:30px;margin-right:10px;">
+                            {{ key2 }}
+                            {% for key3, kompendium in folders %}
+                                <div class="file" style="padding-left:30px;">
+                                    <a href="/{{ kompendium[2] }}" target="_blank">
+                                        <img src="{{('filetypes/'~kompendium[1]~'.svg')|media}}" style="height:30px;margin-right:10px;">
+                                        {{ kompendium[0] }}
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        </div>        
+    </div>
+</div>
+<style>
+.folder {
+    cursor: pointer;
+}
+.folder-closed .file, .folder-closed img.open, .folder-open img.closed {
+    display:none;
+}
+.folder-open .file {
+    display:block;
+}
+</style>

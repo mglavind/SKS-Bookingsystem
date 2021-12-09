@@ -1,0 +1,434 @@
+title = "Kurser"
+url = "/kurser/:kursus?"
+layout = "kurser"
+is_hidden = 0
+
+[Kurser]
+
+[session]
+security = "user"
+redirect = "home"
+
+[Grupper]
+
+[Maaltider]
+
+[Todos]
+
+[Bestillinger]
+
+[Bookables]
+
+[Andagter]
+==
+{% if this.param.kursus %}
+<div class="container-fluid">
+    <div class="col-xs-12">
+        <form data-request="Kurser::onUpdateKursus" id="active_form">
+            <h1>Kursus
+                <div class="pull-right"><a class="btn btn-default ret">Ret</a><button type="submit" class="btn btn-primary gem"
+                        style="display: none;">Gem</button></div>
+            </h1>
+            <input type="hidden" name="id" value="{{ this.page.kursus.id }}">
+            <table class="table table-striped" id="active_table">
+                {% set felter = { 'aar': 'År', 'slags': 'Slags', 'start': 'Start', 'slut': 'Slut' } %} {% for navn, felt in felter %}
+                <tr>
+                    <th>{{ felt }}</th>
+                    <td class="editor show" style="display:none;">{{ this.page.kursus[navn] }}</td>
+                    <td class="editor" style="display:none;"><input type="text" class="form-control" value="{{ this.page.kursus[navn] }}"
+                            name="{{ navn }}"></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </div>
+    <div class="col-xs-12">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#grupper">Grupper</a></li>
+            <li><a data-toggle="tab" href="#todo">To-do</a></li>
+            <li><a data-toggle="tab" href="#andagter">Andagter</a></li>
+            <li><a data-toggle="tab" href="#maaltider">Måltider</a></li>
+            <li><a data-toggle="tab" href="#maaltidsvar">Måltidsvar</a></li>
+            <li><a data-toggle="tab" href="#booking">Bookingsteder</a></li>
+            <li><a data-toggle="tab" href="#bestillinger">Materialebestillinger</a></li>
+            <li><a data-toggle="tab" href="#indkobsliste">Indkøbsliste</a></li>
+            <li><a data-toggle="tab" href="#skaffeliste">Skaffeliste</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="grupper" class="tab-pane fade in active">
+                <div class="col-xs-12">
+                    <h3>Grupper <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gruppeAdd">+</button></h3>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Nummer</th>
+                            <th>Navn</th>
+                            <th style="width:120px;"></th>
+                        </tr>
+                        <tbody id="tbodyGrupper">
+                            {% partial 'grupper/listGrupper' edit=true %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="todo" class="tab-pane fade">
+                <div class="col-xs-12">
+                    <h3>To-do <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#todoAdd">+</button></h3>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Navn</th>
+                            <th>Deadline</th>
+                            <th>Farve</th>
+                            <th>Done</th>
+                            <th style="width:120px;"></th>
+                        </tr>
+                        <tbody id="tbodyTodos">
+                            {% partial 'todos/listTodos' %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="andagter" class="tab-pane fade">
+                <div class="col-xs-12">
+                    <h3>Andagter <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#andagterAdd">+</button></h3>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Nummer</th>
+                            <th>Navn</th>
+                            <th>Tovholder</th>
+                            <th style="width:120px;"></th>
+                        </tr>
+                        <tbody id="tbodyAndagter">
+                            {% partial 'andagter/listAndagter' %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="maaltider" class="tab-pane fade">
+                <div class="col-xs-12">
+                    <h3>Måltider <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#maaltidAdd">+</button></h3>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Navn</th>
+                            <th>Sortering</th>
+                            <th style="width:120px;"></th>
+                        </tr>
+                        <tbody id="tbodyMaaltider">
+                            {% partial 'maaltider/listMaaltider' %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="maaltidsvar" class="tab-pane fade">
+                <div class="col-xs-12">
+                    <h3>Måltidsvar</h3>
+                    <table class="table table-striped">
+                        <tr>
+                            <th></th>
+                            {% for gruppe in this.page.kursus.grupper if gruppe.nummer != 30 %}
+                            <th>{{ gruppe.nummer }} - {{ gruppe.navn }}</th>
+                            {% endfor %}
+                        </tr>
+                        <tbody id="tbodyMaaltidsvar">
+                            {% partial 'kurser/listMaaltidsvar' %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="booking" class="tab-pane fade">
+                <div class="col-xs-12">
+                    <h3>Bookingsteder <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bookableAdd">+</button></h3>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Navn</th>
+                            <th>Sortering</th>
+                            <th>Fællesprogram</th>
+                            <th>Overlap</th>
+                            <th style="width:120px;"></th>
+                        </tr>
+                        <tbody id="tbodyBookables">
+                            {% partial 'bookables/listBookables' %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="bestillinger" class="tab-pane fade">
+                <div class="col-xs-12">
+                    <h3>Bestillinger <button data-request="onBestillingerAutoGodkend" data-request-confirm="Er du sikker på at du vil køre Auto-godkend?"
+                            class="btn btn-primary" data-request-data="kursus: {{ this.param.kursus }}" data-request-success="location.reload();">Auto-godkend</button><button
+                            class="btn btn-primary pull-right export" data-table="table_bestillinger" data-export="export">Export</button></h3>
+                    <table class="table table-striped table-bordered" id="table_bestillinger" style="display:none;">
+                        <thead>
+                            <tr>
+                                <th>Materiale</th>
+                                <th>Bestilt antal</th>
+                                <th>Vi har antal</th>
+                                <th>Start</th>
+                                <th>Slut</th>
+                                <th>Gruppe</th>
+                                <th>Kommentar fra gruppen</th>
+                                <th>Kommentar fra smedene</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyBestillinger1">
+                            {% partial 'kurser/listBestillinger' edit=false %}
+                        </tbody>
+                    </table>
+                    <table class="table table-striped table-bordered display" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Materiale</th>
+                                <th>Bestilt antal</th>
+                                <th>Vi har antal</th>
+                                <th>Start</th>
+                                <th>Slut</th>
+                                <th>Gruppe</th>
+                                <th>Kommentar fra gruppen</th>
+                                <th>Kommentar fra smedene</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyBestillinger">
+                            {% partial 'kurser/listBestillinger' edit=true %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="indkobsliste" class="tab-pane fade">
+                <div class="col-xs-12">
+                    <h3>Indkøbsliste <button class="btn btn-primary pull-right export" data-table="indkobsliste" data-export="export">Export</button></h3>
+                    <table class="table table-striped" id="indkobslisten">
+                        <thead>
+                            <tr>
+                                <th>Materiale</th>
+                                <th>Vi har</th>
+                                <th>Der skal bruges</th>
+                                <th>Der mangler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyIndkoeb">
+                            {% partial 'kurser/listIndkoeb' %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="skaffeliste" class="tab-pane fade">
+                <div class="col-xs-12">
+                    <h3>Skaffelisten <button class="btn btn-primary pull-right export" data-table="skaffelisten" data-export="export">Export</button></h3>
+                    <table class="table table-striped" id="skaffelisten">
+                        <thead>
+                            <tr>
+                                <th>Materiale</th>
+                                <th>Vi har</th>
+                                <th>Der skal bruges</th>
+                                <th>Der mangler</th>
+                                <th>Bestilt af</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodySkaffe">
+                            {% partial 'kurser/listSkaffe' %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container-fluid">
+    <div class="col-xs-12">
+        <h1>Kurser <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#kursusAdd">+</button></h1>
+
+        <table class="table table-striped">
+            <tr>
+                <th>År</th>
+                <th>Påske / Efterår</th>
+                <th>Startdato</th>
+                <th>Slutdato</th>
+                <th style="width:120px;"></th>
+            </tr>
+            <tbody id="tbodyKurser">
+                {% partial 'kurser/listKurser' %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endif %}
+
+<!-- Modal -->
+<form data-request="Kurser::onAddKursus">
+    <div class="modal" id="kursusAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="kursusAddLabel">Opret kursus</h4>
+                </div>
+                <div class="modal-body">
+                    <label>År</label>
+                    <input type="text" class="form-control in-focus" name="aar">
+                    <label>Påske/efterår</label>
+                    <select class="form-control" id="slags" name="slags">
+                        <option value="Påske">Påske</option>
+                        <option value="Efterår">Efterår</option>
+                    </select>
+                    <label>Start</label>
+                    <input type="text" class="form-control datepicker" name="start">
+                    <label>Slut</label>
+                    <input type="text" class="form-control datepicker" name="slut">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal -->
+<form data-request="Grupper::onAddGruppe">
+    <div class="modal" id="gruppeAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="gruppeAddLabel">Opret gruppe</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="kursus_id" value="{{ this.param.kursus }}">
+                    <label>Nummer</label>
+                    <input type="text" class="form-control in-focus" name="nummer">
+                    <label>Navn</label>
+                    <input type="text" class="form-control" name="navn">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal -->
+<form data-request="Maaltider::onAddMaaltid" data-request-update="'maaltider/listMaaltider': '#tbodyMaaltider'">
+    <div class="modal" id="maaltidAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="maaltidAddLabel">Opret måltid</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="kursus_id" value="{{ this.param.kursus }}">
+                    <label>Navn</label>
+                    <input type="text" class="form-control in-focus" name="navn">
+                    <label>Sorteing</label>
+                    <input type="text" class="form-control" name="sortering" value="99">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal -->
+<form data-request="Todos::onAddTodo" data-request-update="'todos/listTodos': '#tbodyTodos'" data-request-success="$('#todoAdd').modal('hide');">
+    <div class="modal" id="todoAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="todoAddLabel">Opret todo</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    <input type="hidden" name="kursus_id" value="{{ this.page.kursus.id }}">
+                    <input type="hidden" name="faelles" value="1">
+                    <label>Tekst</label>
+                    <input type="text" class="form-control in-focus" name="tekst">
+                    <label>Deadline <a href="#" data-toggle="tooltip" title="Deadlinen er som standard kursets start tidspunkt"><i
+                                class="fa fa-info-circle" aria-hidden="true"></i></a></label>
+                    <input type="text" name="deadline" value="{{ this.page.kursus.start }} 16:00" class="form-control datetimepicker">
+                    <label>Grupper</label>
+                    {% partial 'grupper/selectMultipleGrupper' %}
+                    <label>Farve</label>
+                    <input type="color" class="form-control" name="color" value="#1abc9c">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal -->
+<form data-request="Andagter::onAddAndagt" data-request-update="'andagter/listAndagter': '#tbodyAndagter'" data-request-success="$('#andagterAdd').modal('hide');">
+    <div class="modal" id="andagterAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="andagterAddLabel">Opret andagt</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="kursus_id" value="{{ this.page.kursus.id }}">
+                    <label>Nummer</label>
+                    <input type="text" class="form-control in-focus" name="sortering">
+                    <label>Navn</label>
+                    <input type="text" class="form-control" name="navn">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal -->
+<form data-request="Bookables::onAddBookable" data-request-update="'bookables/listBookables': '#tbodyBookables'">
+    <div class="modal" id="bookableAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="bookableAddLabel">Opret bookable</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="kursus_id" value="{{ this.param.kursus }}">
+                    <label>Navn</label>
+                    <input type="text" class="form-control in-focus" name="navn">
+                    <label>Farve</label>
+                    <input type="color" class="form-control" name="color" value="#FFFFFF">
+                    <label>Fællesprogram</label>
+                    <input type='hidden' value='0' name='faelles'>
+                    <div class="checkbox checkbox-slider--b-flat checkbox-slider-md">
+                        <label>
+                            <input type="checkbox" value="1" name="faelles" /><span></span>
+                        </label>
+                    </div>
+                    <label>Overlap</label>
+                    <input type='hidden' value='0' name='overlap'>
+                    <div class="checkbox checkbox-slider--b-flat checkbox-slider-md">
+                        <label>
+                            <input type="checkbox" value="1" name="overlap" /><span></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Luk</button>
+                    <button type="submit" class="btn btn-primary">Gem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

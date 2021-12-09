@@ -1,0 +1,17 @@
+==
+{% for gruppe in user.grupper %}
+    <tr>
+        <td>
+            {% if date(gruppe.kursus.slut) >= date() %}
+                <a href="{{ ('min_gruppe/' ~ gruppe.id)|app }}">{{ gruppe.nummer }} {{ gruppe.navn }}</a>
+            {% else %}
+                {{ gruppe.nummer }} {{ gruppe.navn }}
+            {% endif %}
+        </td>
+        <td>
+            {{ gruppe.pivot.type }}
+        </td>
+        <td>
+            {{ gruppe.kursus.aar }} {{ gruppe.kursus.slags }}
+        </td>
+{% endfor %}

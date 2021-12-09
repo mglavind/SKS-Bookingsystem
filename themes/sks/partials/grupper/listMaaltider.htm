@@ -1,0 +1,36 @@
+==
+{% for maaltid in this.page.maaltider %}
+{% if maaltid.svar == '' %}
+<form data-request="Grupper::onAddMaaltidSvar">
+    {% else %}
+    <form data-request="Grupper::onUpdateMaaltidSvar">
+        {% endif %}
+        <input type="hidden" name="id" value="{{ this.page.gruppe.id }}">
+        <input type="hidden" name="maaltid_id" value="{{ maaltid.id }}">
+        <tr>
+            <td>
+                {{ maaltid.navn }}
+            </td>
+            <td>
+                <span class="vis show"
+                    style="display:none;">{{ (maaltid.svar==1 ? 'Spiser inde' : (maaltid.svar==2 ? 'Henter mad' : (maaltid.svar==3 ? 'Laver selv' : (maaltid.svar==4 ? 'Skriver mail' : '')))) }}</span>
+                <span class="edit" style="display:none;">
+                    <select class="form-control" id="svar" name="svar">
+                        <option value="1" {{ maaltid.svar=='1' ? 'selected' : '' }}>Spiser inde</option>
+                        <option value="2" {{ maaltid.svar=='2' ? 'selected' : '' }}>Henter mad</option>
+                        {{ ('morgen' not in maaltid.navn and 'middag' not in maaltid.navn and 'frokost' not in maaltid.navn ? '<option value="3">Laver selv</option>' : '') }}
+                        <option value="4" {{ maaltid.svar=='4' ? 'selected' : '' }}>Skriver mail</option>
+                    </select>
+                </span>
+            </td>
+            <td>
+                <span class="vis show leave pull-right" style="display:none;">
+                    <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+                </span>
+                <span class="edit pull-right" style="display:none;">
+                    <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+                </span>
+            </td>
+        </tr>
+    </form>
+    {% endfor %}

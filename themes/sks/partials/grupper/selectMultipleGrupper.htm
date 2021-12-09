@@ -1,0 +1,6 @@
+==
+<select multiple class="form-control" name="gruppe_id[]" id="gruppe_id">
+    {% for gruppe in this.page.kursus.grupper %}
+        <option value="{{ gruppe.id }}">{{ gruppe.nummer }} {{ gruppe.navn }}</option>
+    {% endfor %}
+</select>

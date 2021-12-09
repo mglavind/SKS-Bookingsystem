@@ -1,0 +1,48 @@
+title = "Det vi ikke snakker om listen"
+url = "/listen"
+layout = "default"
+==
+<style>
+
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>Det vi ikke taler om listen</h1>
+        </div>
+        <div class="col-xs-12">
+            <h4>Til gennemlæsning</h4>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Post</th>
+                    <th style="width:200px;">Godkendt</th>
+                </tr>
+                </thead>
+                <tbody id="toRead">
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xs-12">
+            <h5>Er gennemlæst</h5>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Post</th>
+                    <th style="width:200px;">Status</th>
+                </tr>
+                </thead>
+                <tbody id="isRead">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% put scripts %}
+<script src="https://npmcdn.com/minigrid@3.0.1/dist/minigrid.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.6.9/firebase.js"></script>
+<script src="{{ [
+        'assets/javascript/pages/det-vi-ikke-snakker-om-listen.js',
+    ]|theme }}"></script>
+{% endput %}

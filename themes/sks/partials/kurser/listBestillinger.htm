@@ -1,0 +1,89 @@
+==
+{% for bestilling in this.page.bestillinger %}
+<tr>
+    {% if edit %}
+    <td>
+        <form data-request="Bestillinger::onBestillingUpdateMateriale">
+            <input type="hidden" name="id" value="{{ bestilling.id }}">
+            <span class="vis show" style="display:none;"><a href="{{ ('materialer/' ~ bestilling.materiale.id)|app }}">{{
+                    bestilling.materiale.navn }}<small> - {{ bestilling.materiale.enhed }}</small></a></span>
+            <span class="edit" style="display:none;">
+                <input type="text" name="materiale_id" value="{{ bestilling.materiale_id }}" class="form-control">
+            </span>
+            <span class="vis show leave pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+            </span>
+            <span class="edit pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableAnnuller">Annullér</button>
+                <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+            </span>
+        </form>
+    </td>
+    {% else %}
+    <td><a href="{{ ('materialer/' ~ bestilling.materiale.id)|app }}">{{ bestilling.materiale.navn }}<small> - {{
+                bestilling.materiale.enhed }}</small></a></td>
+    {% endif %}
+    <td>{{ bestilling.antal }}</td>
+    <td>{{
+        ((this.page.bestilte[bestilling.materiale.id]['lager']-this.page.bestilte[bestilling.materiale.id]['bestilt'])
+        >= 0 ? "<i class='fa fa-check text-success' aria-hidden='true'></i>" : "<i class='fa fa-ban text-danger'
+            aria-hidden='true'></i>") }} <small>Lager: {{ (this.page.bestilte[bestilling.materiale.id]['lager'] == '' ?
+            0: this.page.bestilte[bestilling.materiale.id]['lager']) }}{{ edit ? '<br>' : ' - ' }}Bestilt: {{
+            this.page.bestilte[bestilling.materiale.id]['bestilt'] }}</small></td>
+    <td>{{ bestilling.start }}</td>
+    <td>{{ bestilling.slut }}</td>
+    <td>{{ bestilling.gruppe.nummer }} {{ bestilling.gruppe.navn }}{{ edit ? '<br>' : ' - ' }}<small>{{
+            bestilling.user.name }} {{ bestilling.user.surname }}</small></td>
+    <td>{{ bestilling.kommentar_user }}</td>
+    {% if edit %}
+    <td>
+        <form data-request="Bestillinger::onBestillingUpdateKommentar">
+            <input type="hidden" name="id" value="{{ bestilling.id }}">
+            <span class="vis show" style="display:none;">{{ bestilling.kommentar_smedene }}</span>
+            <span class="edit" style="display:none;">
+                <input type="text" name="kommentar_smedene" value="{{ bestilling.kommentar_smedene }}" class="form-control">
+            </span>
+            <span class="vis show leave pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+            </span>
+            <span class="edit pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableAnnuller">Annullér</button>
+                <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+            </span>
+        </form>
+    </td>
+    <td class="{{ (bestilling.godkendt == 1 ? 'success' : (bestilling.godkendt == 2 ? 'success' : (bestilling.godkendt == '3' ? 'danger' : ''))) }}">
+        <form data-request="Bestillinger::onBestillingUpdateGodkendt">
+            <input type="hidden" name="id" value="{{ bestilling.id }}">
+            <span class="vis show" style="display:none;">{{ (bestilling.godkendt == 1 ? '<i class="fa fa-check "
+                    aria-hidden="true"></i> <small>Tildelt</small>' : (bestilling.godkendt == 2 ? '<i class="fa fa-check"
+                    aria-hidden="true"></i> <small>Indkøb</small>' : (bestilling.godkendt == '3' ? '<i class="fa fa-ban"
+                    aria-hidden="true"></i> <small>Skaffeliste</small>' : ''))) }}</span>
+            <span class="edit" style="display:none;">
+                <select name="godkendt" class="form-control">
+                    <option value="0" {{ (bestilling.godkendt == 0 ? 'selected' : '') }}> -- </option>
+                    <option value="1" {{ (bestilling.godkendt == 1 ? 'selected' : '') }}>Tildelt</option>
+                    <option value="2" {{ (bestilling.godkendt == 2 ? 'selected' : '') }}>Indkøbslisten</option>
+                    <option value="3" {{ (bestilling.godkendt == 3 ? 'selected' : '') }}>Skaffelisten</option>
+                </select>
+                <!--<input type="text" name="godkendt" value="{{ bestilling.godkendt }}" class="form-control">-->
+            </span>
+            <span class="vis show leave pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableRet">Ret</button>
+            </span>
+            <span class="edit pull-right" style="display:none;">
+                <button type="button" class="btn btn-xs btn-default tableAnnuller">Annullér</button>
+                <button type="submit" class="btn btn-xs btn-primary tableGem">Gem</button>
+            </span>
+        </form>
+    </td>
+    {% else %}
+    <td>{{ bestilling.kommentar_smedene }}</td>
+    <td class="{{ (bestilling.godkendt == 1 ? 'success' : (bestilling.godkendt == 2 ? 'success' : (bestilling.godkendt == '3' ? 'danger' : ''))) }}">{{
+        (bestilling.godkendt == 1 ? '<i class="fa fa-check " aria-hidden="true"></i> <small>Tildelt</small>' :
+        (bestilling.godkendt == 2 ? '<i class="fa fa-check" aria-hidden="true"></i> <small>Indkøb</small>' :
+        (bestilling.godkendt == '3' ? '<i class="fa fa-ban" aria-hidden="true"></i> <small>Skaffeliste</small>' : '')))
+        }}</span></td>
+    {% endif %}
+</tr>
+{% endfor %}

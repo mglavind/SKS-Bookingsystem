@@ -1,0 +1,10 @@
+==
+{% for skaffe in this.page.skaffe %}
+    <tr>
+        <td><a href="{{ ('materialer/' ~ skaffe.id)|app }}">{{ skaffe.navn }}<small> - {{ skaffe.enhed }}</small></a></td>
+        <td>{{ (skaffe.lager == "" ? 0 : skaffe.lager ) }}</td>
+        <td>{{ (skaffe.bestilt == "" ? 0 : skaffe.bestilt ) }}</td>
+        <td><b>{{ (skaffe.bestilt-skaffe.lager) }}</b></td>
+        <td>{{ skaffe.grupper }}</td>
+    </tr>
+{% endfor %}

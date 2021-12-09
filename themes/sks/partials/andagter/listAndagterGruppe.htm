@@ -1,0 +1,20 @@
+==
+{% for andagt in this.page.andagter %}
+    <tr>
+        <td>
+            <span class="vis show" style="display:none;">{{ andagt.sortering }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="sortering" value="{{ andagt.sortering }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ andagt.navn }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="navn" value="{{ andagt.navn }}" class="form-control"></span>
+        </td>
+        <td>
+            <span class="vis show" style="display:none;">{{ andagt.tovholder }}</span>
+            <span class="edit" style="display:none;"><input type="text" name="tovholder" value="{{ andagt.tovholder }}" class="form-control"></span>
+        </td>
+        <td>
+            <a href="/andagter/{{ andagt.id }}" class="btn btn-xs btn-success">Åbn</a>
+        </td>
+    </tr>
+{% endfor %}

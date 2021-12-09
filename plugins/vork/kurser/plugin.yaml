@@ -1,0 +1,6 @@
+plugin:
+    name: 'vork.kurser::lang.plugin.name'
+    description: 'vork.kurser::lang.plugin.description'
+    author: Vork
+    icon: oc-icon-tree
+    homepage: ''
