@@ -8,14 +8,14 @@
 
 // Used by the fixed navigation
 body {
-    padding-top: 70px;
+    padding-top: 50px;
     background-color: @brand-primary;
 }
 
 header#layout-header {
     .navbar-brand {
         padding-left: 60px;
-        background-image: url("../images/logo.png");
+        background-image: url('../images/logo.png');
         background-size: auto 75%;
         background-repeat: no-repeat;
         background-position: 10px 50%;
@@ -41,11 +41,10 @@ header#layout-header {
     }
     .panel-heading {
         a {
-            display: block;
+	        display: block;
             color: @text-color;
-            &:hover {
-                color: @link-color;
-            }
+            &:hover { color: @link-color; }
         }
     }
 }
+
